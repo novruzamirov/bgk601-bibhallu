@@ -228,7 +228,6 @@ Bu çalışmayı atıf yapmak isterseniz:
 
 ## ✉️ İletişim
 
-**Novruz Amirov** · ITU Siber Güvenlik Mühendisliği ve Kriptografi
-[GitHub @novruzamirov](https://github.com/novruzamirov)
-
-*Bu proje, master tezimin "Scalable Vulnerability Triage Using Multi-Agent AI Systems and Automated CVSS Assessment" başlığındaki çoklu-LLM değerlendirme çerçevesi için bir ön-çalışma olarak da hizmet etmektedir.*
+**Novruz Amirov** · İTÜ Siber Güvenlik Mühendisliği ve Kriptografi
+📧 [amirov20@itu.edu.tr](mailto:amirov20@itu.edu.tr)
+🐙 [GitHub @novruzamirov](https://github.com/novruzamirov)

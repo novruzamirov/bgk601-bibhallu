@@ -1,0 +1,870 @@
+% =============================================================================
+%  BibHallu-Bench -- BGK601 Final Raporu
+%  Yazar: Novruz Amirov (707241004) | ITU Siber Guvenlik Muh. ve Kriptografi
+%  Derleme: latexmk -pdf main      (veya: pdflatex; biber; pdflatex; pdflatex)
+% =============================================================================
+\documentclass[11pt,a4paper]{article}
+
+% --- Dil ve karakter kodlamasi ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[turkish]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% --- Sayfa duzeni ve tipografi ---
+\usepackage[a4paper,margin=2.5cm]{geometry}
+\usepackage{setspace}
+\setstretch{1.25}                    % proje doc: 1.15-1.5 araliginda
+\usepackage{microtype}
+\usepackage{parskip}
+\usepackage{titlesec}
+
+% --- Tablo, grafik, link ---
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage[hidelinks]{hyperref}
+\usepackage{cleveref}
+
+% --- Kaynakca (IEEE stili) ---
+\usepackage[backend=biber,style=ieee,sorting=none]{biblatex}
+\addbibresource{refs.bib}
+
+% --- Placeholder makrolari (Stage 3 sonra doldurulacak yerler) ---
+\newcommand{\TBD}{\textcolor{red}{\textbf{[?]}}}
+\newcommand{\todoresult}[1]{%
+  \par\medskip\noindent\fcolorbox{red!50}{red!8}{%
+    \begin{minipage}{0.96\linewidth}\small
+      \textcolor{red}{\textbf{[STAGE-3 SONUCU BEKLENIYOR]}} #1
+    \end{minipage}}\par\medskip}
+\newcommand{\figplaceholder}[2]{%
+  \fbox{\begin{minipage}{0.9\linewidth}\centering\vspace{1cm}%
+    \textcolor{red}{\textbf{[Sekil pending: #1]}}\\[0.2em]%
+    \texttt{#2}\vspace{1cm}\end{minipage}}}
+
+\lstset{basicstyle=\ttfamily\footnotesize, breaklines=true,
+        frame=single, framesep=4pt, columns=fullflexible}
+
+% --- Baslik bilgileri ---
+\title{\textbf{Arastirma Makalelerinde Bibliyografya
+       Halusinasyonlarinin LLM Tabanli Tespiti:\\
+       Cok Modelli Karsilastirmali Degerlendirme ve RAG Ablasyonu}\\[0.6em]
+       \large BGK601 -- Final Raporu}
+\author{Novruz Amirov (707241004)\\
+        Istanbul Teknik Universitesi\\
+        Siber Guvenlik Muhendisligi ve Kriptografi Ana Bilim Dali\\
+        Ders Koordinatoru: Prof. Dr. Kemal Bicakci}
+\date{31 Mayıs 2026 \quad ---\quad Bahar 2025--2026}
+
+% =============================================================================
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+
+\begin{center}\small
+\fbox{\begin{minipage}{0.85\linewidth}\small\textbf{Yapay Zeka Araçları Kullanım Notu.}
+Bu raporun ve sunum slaytlarının hazırlanmasında Claude (Anthropic) ve
+ChatGPT (OpenAI) araçlarından kod iskeleti, metin düzenleme ve kaynak
+tarama desteğinde yararlanılmıştır. Tüm deneysel sonuçlar, benchmark
+anotasyonu ve nihai metin öğrenci tarafından denetlenmiştir; YZ çıktıları
+ground-truth olarak kullanılmamıştır (bkz.~Ek~\ref{appx:ai}).\end{minipage}}
+\end{center}
+
+% --- Ozet (1 sayfa) -----------------------------------------------------------
+\section*{Ozet (Executive Summary)}
+Buyuk dil modellerinin (LLM) akademik metin uretiminde yayginlasmasiyla
+birlikte, bu modellerin urettigi bibliyografya bolumlerinde var olmayan veya
+hatali atiflanmis kaynaklarin (bibliyografya halusinasyonlari) gorulme sikligi
+ciddi bir akademik butunluk sorunu olusturmustur. Bu calismada, akademik
+referanslarda bes farkli halusinasyon turunu (H1: tamamen uydurma referans,
+H2: metadata halusinasyonu, H3: semantik uyumsuzluk, H4: kronolojik
+halusinasyon, H5: dogru referans/negatif) ayirt eden 300 ornekli ozgun bir
+benchmark veri kumesi tasarlanmis ve dort LLM uzerinde sistematik bir
+karsilastirma yurutulmustur: iki kapali kaynak API modeli (GPT-4o,
+GPT-4o-mini) ile iki acik kaynak yerel model (Llama~3.1-8B, Qwen2.5-7B,
+Ollama uzerinde Apple~M2~Pro/16~GB birlesik bellek). Acik kaynak modellere
+ayrica CrossRef tabanli bir RAG (retrieval-augmented generation) katmani
+uygulanmis; istatistiksel anlamlilik bootstrap guven araliklari ve McNemar
+testleriyle raporlanmistir.
+
+Ana bulgular: ikili halusinasyon tespiti F1 skoru GPT-4o icin
+\textbf{0.911} (en yuksek), Qwen2.5-7B icin \textbf{0.071} (en dusuk) olarak
+olculmustur. RAG entegrasyonu, acik kaynak modellerde ortalama
+$\Delta\text{F1}=+0.320$ kazanim saglamis (Llama: $+0.231$, Qwen: $+0.409$);
+RAG'li Llama'nin F1'i \textbf{0.792}'ye yukselerek GPT-4o-mini'ye (0.862)
+\emph{0.07 puanlik} bir farka yaklasmistir. Tum modellerde JSON ayikla-
+bilirligi \%100, calistirmalar arasi tutarlilik (Fleiss~$\kappa$) 0.90 ile
+1.00 araligindadir. Maliyet-basarim ekseninde GPT-4o-mini
+(\$0.0003/dogru karar) en verimli kapali kaynak; acik kaynak modeller sifir
+marjinal maliyetle yerel olarak calistirilabilmektedir. Tum pairwise farklar
+McNemar testiyle istatistiksel olarak anlamlidir ($p < 0.01$).
+
+\textbf{Anahtar Kelimeler:} LLM degerlendirmesi, halusinasyon tespiti,
+bibliyografya, RAG, akademik butunluk, CrossRef, ChromaDB.
+
+\newpage
+
+% --- 1. Giris ---------------------------------------------------------------
+\section{Giris ve Motivasyon}
+\label{sec:giris}
+
+Buyuk dil modelleri (Large Language Models, LLM), arastirma destek
+sureclerinin --- yazim, ozetleme, kaynak tarama --- ayrilmaz bir bileseni hâline
+gelmistir. Vaswani ve ark.\ tarafindan onerilen Transformer mimarisi
+\cite{vaswani2017attention} ve onu izleyen olcekli on-egitim paradigmasi
+\cite{devlin2019bert,brown2020gpt3}, bu modellerin dogal dil uretimindeki basarisini
+beklentilerin uzerine cikarmis; ancak bu basarinin yaninda \emph{halusinasyon}
+adi verilen sistematik bir hata sinifi da gun yuzune cikmistir. Ji ve ark.\
+halusinasyonu, ``modelin kendi parametrik bilgisinden veya verili kaynaktan
+sapan, dogrulanabilir bicimde yanlis icerik uretmesi'' olarak tanimlar
+\cite{ji2023survey}.
+
+\paragraph{Bibliyografyaya ozgu sorun.}
+Halusinasyon, ozellikle akademik atiflarda kritik bir bicim alir. Walters ve
+Wilder, ChatGPT'nin urettigi bibliyografyalarda yer alan kaynaklarin yarisindan
+fazlasinin ya hic var olmadigini ya da en az bir alaninda hatali oldugunu
+raporlamistir \cite{walters2023fabrication}. Saglik bilimleri alaninda yapilan
+benzer calismalar da, tibbi metin uretiminde uretilen referanslarin %47-%73
+oraninda fabrikasyon icerdigini gostermistir
+\cite{bhattacharyya2023high,athaluri2023exploring}. Bu bulgular yalnizca
+akademik usulsuzlugu degil, ayni zamanda yapilan iddialarin
+\emph{izlenebilirligini} de tehdit eder.
+
+\paragraph{Mevcut yaklasimlarin yetersizligi.}
+Bibliyografya dogrulamasinda kullanilan klasik yontemler iki uca yerlesir:
+(i) tamamen elle dogrulama, ki olceklenmesi mumkun degildir; (ii) basit
+DOI/URL kontrolu, ki yalnizca \emph{yokluk}u tespit edebilir, anlam diizeyindeki
+celiskileri (yanlis dergi, baglama uymayan icerik, imkansiz yil) yakalayamaz.
+GPTZero'nun Hallucination Detector gibi yeni nesil ticari araclar iddia
+duzeyinde kaynak onerisi sunmakta; ancak \emph{var olan} bir referansin icerik
+ve baglam uyumunu analiz edememektedir.
+
+\paragraph{Bu calismanin katkilari.}
+Bu rapor, LLM'leri hem \emph{degerlendirme aracilari} hem de
+\emph{degerlendirilen ozne} olarak konumlandirir ve su katkilari sunar:
+
+\begin{enumerate}[nosep]
+\item Bes halusinasyon turunu (H1--H5) ayirt eden, programatik insa + insan
+dogrulamasiyla olusturulmus, 300 ornekli ozgun bir \emph{benchmark veri
+kumesi}.
+\item Yapilanmis JSON ciktisi ve cogunluk karariyla calisan, $\geq$3 bagimsiz
+calistirmali, model-agnostik bir \emph{degerlendirme cercevesi};
+bootstrap guven araliklari ve McNemar testleriyle istatistiksel anlamliligi
+ile birlikte.
+\item Iki kapali kaynak (GPT-4o, GPT-4o-mini) ve iki acik kaynak (Llama~3.1-8B,
+Qwen2.5-7B) modelin esit kosullarda \emph{karsilastirmali analizi}.
+\item CrossRef tabanli bir RAG katmaninin acik kaynak modellere getirdigi
+kazanimin \emph{ablasyon olcumu}: parametric memory--only --- {} RAG farki
+$\Delta$F1, $\Delta$Precision, $\Delta$Recall biciminde.
+\item Tum kod, prompt sablonu ve veri kartinin acik kaynak olarak
+yayinlanmasi (MIT lisansli GitHub deposu).
+\end{enumerate}
+
+\paragraph{Rapor yapisi.}
+Bolum~\ref{sec:related} ilgili calismalari ozetler; Bolum~\ref{sec:yontem}
+yontem-bilimi sunar; Bolum~\ref{sec:sonuc} deneysel bulgulari verir;
+Bolum~\ref{sec:tartisma} tartisma ve sinirlamalari; Bolum~\ref{sec:gelecek}
+sonuc ve gelecek calismalari kapsar.
+
+% --- 2. Ilgili Calismalar ---------------------------------------------------
+\section{Ilgili Calismalar}
+\label{sec:related}
+
+\subsection{LLM halusinasyonu: taksonomi ve olcum}
+Ji ve ark.\ \cite{ji2023survey} halusinasyonu \emph{intrinsic} (verili
+girdiden sapma) ve \emph{extrinsic} (verili girdide bulunmayan ama dogrulanmayan
+bilgi) olmak uzere ikiye ayirir. Huang ve ark.\ \cite{huang2023hallucination}
+bunu daha ince ayirimlara goturur: \emph{faktualite halusinasyonu},
+\emph{tutarlilik halusinasyonu} ve \emph{ihtimal halusinasyonu}. Bibliyografya
+halusinasyonu, tipik olarak faktualite halusinasyonunun bir alt sinifidir.
+Olcum tarafinda, Maynez ve ark.\ \cite{maynez2020faithfulness} insan
+degerlendirici tabanli sadakat olculerini, Manakul ve ark.\
+\cite{manakul2023selfcheckgpt} kara kutu modelleri icin \emph{ozkontrol}
+yaklasimini onermistir. Min ve ark.\ FActScore'da \cite{min2023factscore} uzun
+ciktilarin atomik gercek ifadelere ayrilarak skorlanmasini onerir; bu fikir,
+bizim referans-basina-karar yapimizla yapisal olarak benzerlik gosterir.
+
+\subsection{Bibliyografya/atif halusinasyonu}
+Walters ve Wilder \cite{walters2023fabrication} ChatGPT'nin urettigi
+84 bibliyografya icin elle dogrulama yapmis; referanslarin %55'inde en az bir
+alan hatasi (yanlis yazar, yil, sayfa numarasi vb.), %18'inde ise referansin
+tamamen uydurma oldugunu raporlamistir. Tibbi metinlerde
+Bhattacharyya ve ark.\ \cite{bhattacharyya2023high} %47, Athaluri ve ark.\
+\cite{athaluri2023exploring} %69 fabrikasyon orani bildirir. Bu sayisal
+farkliliklar, hem alan baginliligini hem de \emph{tek tip benchmark
+eksikligini} gosterir; bizim calismamiz bu eksikligi bes kategorili bir
+taksonomiyle gidermeye yoneliktir.
+
+\subsection{Retrieval-Augmented Generation (RAG)}
+Lewis ve ark.\ \cite{lewis2020rag} dis bilgi tabaninin parametric memory'nin
+sinirlarini astigi senaryolari sistemlestirmis; Borgeaud ve ark.\ RETRO
+mimarisiyle \cite{borgeaud2022retro} milyarlarca token icinden retrieval ile
+modelin daha kucuk parametrik agirliklarla daha iyi performans gosterebilecegini
+gostermistir. Izacard ve Grave \cite{izacard2021leveraging} retrieval'in
+acik alan QA'da getirdigi kazanimi belgeler. Yakin zamandaki kapsamli RAG
+literatur taramasi Gao ve ark.\ \cite{gao2024ragsurvey} tarafindan
+yapilmistir. Bibliyografya dogrulamasi, ozellikle ``referansin gercekligi'' icin
+RAG'in dogal bir uygulama alanidir: bilgi tabanindaki en yakin kayitla yapilan
+karsilastirma, modelin uydurma sezgisini disardan deneyimle besler.
+
+\subsection{Embedding ve retrieval altyapilari}
+Reimers ve Gurevych'in \cite{reimers2019sbert} Sentence-BERT'i, semantik
+benzerlik gorevlerinde cumle/paragraf duzeyinde gomulmeleri sistemlestirmistir;
+bu calisma onlarin \texttt{all-MiniLM-L6-v2} modelini retriever embedder olarak
+kullanir.
+
+\subsection{Prompt muhendisligi}
+Chain-of-thought \cite{wei2022cot} ve self-consistency \cite{wang2023selfconsistency}
+teknikleri akil yurutme gerektiren gorevlerde tutarli kazanim saglar; H3
+(semantik uyumsuzluk) gibi kategorilerimizde bu teknikleri ablasyon olarak
+denedik (bkz.~Bolum~\ref{sec:tartisma}).
+
+\subsection{Siber guvenlik baglaminda LLM}
+Bhatt ve ark.\ CyberSecEval \cite{bhatt2023cyberseceval} LLM'lerin guvenlik
+tartismalarinda ne kadar guvenli ve dogru oldugunu sorgular; Yao ve ark.\
+\cite{yao2024survey} ise LLM'lerin guvenlik etkilerini iki yonlu ele alir.
+Akademik butunlukteki halusinasyon, dolayli olarak dezenformasyon ve sosyal
+muhendislik vektorlerine baglandigi icin siber guvenlik calismalari kapsaminda
+mesrudur.
+
+\subsection{LLM degerlendirme metodolojisi}
+Liang ve ark.\ HELM cerceveiyle \cite{liang2023helm} cok boyutlu LLM
+degerlendirmesinin (dogruluk + sertlik + maliyet) gerekliligini ortaya koymus;
+Zheng ve ark.\ ``LLM-as-a-Judge'' yaklasiminin sinirlarini gosterir
+\cite{zheng2023judging}. Bu calisma, otomatik metriklerle (F1, Fleiss~$\kappa$,
+bootstrap guven araliklari) insan dogrulamasini birlikte kullanir.
+
+% --- 3. Yontem --------------------------------------------------------------
+\section{Yontem}
+\label{sec:yontem}
+
+\subsection{Uygulama tanimi ve kapsam}
+Calismanin uygulama alani, akademik makalelerin \emph{bibliyografya bolumlerinde}
+yer alan referanslarin LLM tabanli analizidir. Sistem, IEEE/ACM/APA biciminde
+yazilmis Ingilizce bir referansi (gerekirse atif baglamiyla birlikte) girdi
+olarak alir; cikti olarak \texttt{\{hallucination, type, confidence, reason\}}
+alanlari iceren bir JSON karari uretir. Hedef kullanicilar arastirmacilar,
+editorler ve akademik etik birimlerdir. Kapsam disinda kalan unsurlar: tam
+metin dogrulamasi, in-text citation analizi, Ingilizce disindaki dillerde
+atiflar ve patent/teknik rapor referanslari.
+
+\subsection{Halusinasyon turleri ve kategorizasyon}
+\label{sub:cat}
+Calismadaki bes halusinasyon turunu Tablo~\ref{tab:cat} ozetler. Bu sema, hem
+mevcut literaturdeki sezgisel siniflandirmalari
+\cite{walters2023fabrication,huang2023hallucination} hem de bibliyografyalara
+ozgu hata oruntulerini hesaba katar.
+
+\begin{table}[t]
+\caption{Halusinasyon kategorileri (H1--H5) ve insa mantigi.}
+\label{tab:cat}\small
+\begin{tabularx}{\columnwidth}{l l X}
+\toprule
+\textbf{Kod} & \textbf{Kategori} & \textbf{Insa mantigi (deterministik)} \\
+\midrule
+H1 & Var olmayan referans & Olusturma kurallariyla uretilen, hicbir veritabaninda yer almayan tamamen sentetik atif. \\
+H2 & Metadata halusinasyonu & Gercek bir kaydin yazar/yil/dergi alaninin biri rastgele bozulur. \\
+H3 & Semantik uyumsuzluk & Gercek bir kayit, konusuyla ilgisiz bir atif baglamina yerlestirilir. \\
+H4 & Kronolojik halusinasyon & Yil, gelecek tarihe veya teknolojinin var olusundan oncesine cekilir. \\
+H5 & Dogru referans (negatif) & Tum alanlari dogrulanmis gercek kayit. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Gereksinim analizi ve kriter cercevesi}
+\label{sub:kriter}
+LLM'nin karsilamasi gereken fonksiyonel gereksinimler: (i)~yapilanmis JSON
+ciktisi, (ii)~$\geq$8K tokenli baglam penceresi (20--60 referansli
+bibliyografyalar icin), (iii)~CrossRef/OpenAlex tarzi metadata semasini
+yorumlayabilme, (iv)~cok adimli akil yurutme (retrieval $\to$ verification
+$\to$ scoring). Fonksiyonel olmayan gereksinimler: gizlilik (kurumsal dagitim
+icin on-premise tercih), gecikme (batch toleransli, referans basina $\leq$30~s),
+maliyet ve aciklanabilirlik.
+
+Tablo~\ref{tab:kriter} degerlendirme kriterlerini ve agirliklarini verir
+(toplam = 1.00). Agirliklar, halusinasyon tespitinin nihai amaci olan
+``dogru karar'' (F1) etrafinda toplanmis; tutarlilik ve RAG katkisi
+ikincil amaclar olarak dahil edilmistir.
+
+\begin{table}[t]
+\caption{Degerlendirme kriteri cercevesi ve agirliklar.}
+\label{tab:kriter}\small
+\begin{tabularx}{\columnwidth}{l X l c}
+\toprule
+\textbf{Kriter} & \textbf{Olcum yontemi} & \textbf{Metrik} & \textbf{Agirlik} \\
+\midrule
+Teknik dogruluk        & 300 ornekluk uzman anotasyonu & F1            & 0.35 \\
+Halusinasyon alt-tur   & 5 kategori bazinda F1         & Makro F1      & 0.25 \\
+Yanit tutarliligi      & 3 bagimsiz calistirma         & Fleiss $\kappa$ & 0.10 \\
+RAG katkisi            & RAG ile/RAG olmadan ablasyon  & $\Delta$F1    & 0.15 \\
+Gecikme                & Referans basina ortalama sure & p50 / p95     & 0.05 \\
+Maliyet etkinligi      & Dogru tespit basina maliyet   & USD/dogru     & 0.10 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Benchmark veri kumesi}
+\label{sub:dataset}
+\paragraph{Yapi.} 300 ornek; kategori dagilimi H1: 80, H2: 60, H3: 60, H4: 40,
+H5: 60. Sinif dengesi pozitif/negatif = \%80/\%20. Zorluk etiketleri (kolay,
+orta, zor) her ornege atanmistir.
+
+\paragraph{Insa sureci.} Veri kumesi iki katmanli bir insa mantigiyla
+olusturulmustur:
+
+\begin{enumerate}[nosep]
+\item \textbf{Tohum gercek makaleler:} CrossRef API uzerinden ($\sim$50~istek/sn
+dinamik limit; \texttt{X-Rate-Limit-*} basliklariyla doglanir) dogrulanan,
+makine ogrenmesi ve siber guvenlik alaninda iyi bilinen 20 tohum makaleye ek
+olarak CrossRef konu-bazli sorgularla pull edilen 400'e yakin makale.
+\item \textbf{Kategori uretici fonksiyonlar:} H1 tamamen sentetik;
+H2--H5 ise gercek tohum makaleler uzerinde \emph{deterministik bozulmalarla}
+elde edilir. Etiket, insa mantiginin matematiksel sonucudur (orn. ``ben bu
+referansi yili gelecege cekerek bozdum''~$\Rightarrow$~H4).
+\end{enumerate}
+
+\paragraph{Anotasyon protokolu.} Ureticilerin sagladigi
+\emph{construction'dan-bilinen} etiketler, ardindan komut satiri tabanli
+\texttt{annotation\_tool.py} ile ogrenci tarafindan tek tek gozden gecirilmis;
+\texttt{verified=true} bayragi tum ornekler icin elle onaylanmistir. YZ
+otomatik etiketlemesi ground-truth olarak \emph{kullanilmamistir} (rubrik
+sarti).
+
+\subsection{Deney tasarimi}
+\label{sub:deney}
+\paragraph{Model portfoyu.} Calismada dort model degerlendirilmistir
+(Tablo~\ref{tab:models}). Kapali kaynak iki API modeli ayni saglayicidan
+secilmistir (OpenAI \cite{openai2023gpt4}); bu, ``ayni aile icinde
+kapasite-maliyet ekseni'' karsilastirmasini olanakli kilar. Acik kaynak yerel
+modeller olarak Llama~3.1-8B \cite{touvron2023llama2} ve Qwen2.5-7B
+\cite{qwen25} secilmistir; Apple~M2~Pro isteminde (16~GB birlesik bellek,
+Metal GPU hizlandirmasi) Ollama uzerinden 4-bit Q4 nicemleme ile
+calistirilmistir.
+
+\begin{table}[t]
+\caption{Degerlendirilen modeller ve calistirma ayrintilari.}
+\label{tab:models}\small
+\begin{tabularx}{\columnwidth}{l l X}
+\toprule
+\textbf{Model} & \textbf{Tur} & \textbf{Calistirma} \\
+\midrule
+GPT-4o            & Kapali (API) & OpenAI Chat Completions, \texttt{response\_format=json\_object}, T=0 \\
+GPT-4o-mini       & Kapali (API) & Ayni saglayici, kucuk varyant; maliyet karsilastirmasi icin \\
+Llama 3.1-8B      & Acik (yerel) & Ollama, \texttt{format=json}, num\_ctx=8192, Q4\_K\_M \\
+Qwen2.5-7B        & Acik (yerel) & Ollama, \texttt{format=json}, num\_ctx=8192, Q4\_K\_M \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\paragraph{Protokol.} (i)~Sistem mesaji + kullanici mesaji sablonu sabittir
+(bkz.~Ek~\ref{appx:prompt}); (ii)~temperature 0.0; (iii)~her ornek 3 bagimsiz
+calistirma + cogunluk karari; (iv)~yapilanmis JSON cikti saglayicinin tara-
+findan zorlanir (OpenAI \texttt{json\_object}, Ollama \texttt{format=json});
+(v)~ayiklanamayan ciktilar icin saglam yedek (fallback) cozumleyici.
+
+\subsection{RAG mimarisi}
+\label{sub:rag}
+RAG bilesenimiz, \emph{var olus} sorgusu icin tasarlanmistir: bir referans
+dizgesi sorgu olarak verildiginde, gercek makaleler korpusunda yakin bir
+kayit BULUNAMAZSA, modelin H1 (uydurma) karari verme egilimi artirilir.
+
+\begin{enumerate}[nosep]
+\item \textbf{Korpus:} CrossRef'ten 20 konu sorgusuyla cekilen $\sim$400 gercek
+akademik makale (baslik, yazarlar, yil, dergi, DOI ve --- bulundugunda ---
+abstract); OpenAlex anahtari mevcutsa abstract zenginlestirilir.
+\item \textbf{Embedding:} \texttt{sentence-transformers/all-MiniLM-L6-v2}
+\cite{reimers2019sbert}, cosine benzerligine gore L2-normalize edilmistir.
+\item \textbf{Vector store:} ChromaDB (HNSW, cosine).
+\item \textbf{Retrieval:} top-$k=4$.
+\item \textbf{Prompt entegrasyonu:} getirilen kayitlar, atif baglamindan ayri
+bir blokta, modele ``bu kayitlari referansin gercekligini dogrulamak icin
+kullan'' yonergesiyle eklenir.
+\end{enumerate}
+
+\subsection{Metrikler ve istatistik}
+\paragraph{Ikili tespit.} Accuracy, Precision, Recall, F1, Matthews
+Correlation Coefficient (MCC).
+\paragraph{Kategori bazinda.} H1--H5 icin one-vs-rest F1; makro ortalama.
+\paragraph{Tutarlilik.} Fleiss~$\kappa$ (3+ tekrar icin
+dogru olcut; Cohen's $\kappa$ yalnizca 2 degerlendiricilik durumlara uygundur).
+\paragraph{Anlamlilik.} F1 icin $n=2000$ bootstrap orneklemeyle \%95 guven
+araligi; iki model arasinda McNemar testi (b ve c esleri uzerinde, sureklilik
+duzeltmeli $\chi^2$, df=1).
+
+% --- 4. Deneysel Kurulum ----------------------------------------------------
+\section{Deneysel Kurulum}
+\label{sec:kurulum}
+\paragraph{Donanim.} Apple M2 Pro (10 cekirdek CPU, 16 cekirdek GPU), 16~GB
+birlesik bellek, 512~GB SSD. Apple Silicon, ayrik VRAM yerine \emph{Unified
+Memory Architecture} kullanir; 7--8B parametrik modeller Q4 nicemlemeyle
+yaklasik 4.7~GB yer kaplar ve Metal GPU hizlandirmasiyla rahatca calisir.
+\paragraph{Yazilim.} Python 3.10+; \texttt{requests}, \texttt{scikit-learn},
+\texttt{matplotlib} cekirdek bagimliliklar; RAG icin \texttt{chromadb} ve
+\texttt{sentence-transformers}; model istemcileri \texttt{openai} ve Ollama
+HTTP API'si.
+\paragraph{Tekrarlanabilirlik.} Tum kod, \texttt{config/config.yaml} ile
+sablon hâlinde yapilandirilmistir; her saglayici icin tek bir
+\texttt{ModelClient} alt sinifi mevcuttur. \texttt{scripts/} icindeki
+numarali kabuk betikleri (0--5) tum pipeline'i bastan sona surdurur.
+
+% --- 5. Sonuclar ------------------------------------------------------------
+\section{Sonuclar}
+\label{sec:sonuc}
+
+Bu bolumdeki tablo ve grafikler, ogrencinin yerel makinesinde calistirilan
+Stage~1 (tum benchmark uzerinde temel degerlendirme) ve Stage~2 (RAG ablasyonu)
+ciktilarinin (\texttt{results/summary.json}, \texttt{results/rag\_ablation.json})
+dogrudan istatistikleridir. Stage~3 (\texttt{scripts/5\_analyze.sh}) tarafindan
+uretilen grafikler \texttt{results/figures/} altinda saklanir.
+
+\subsection{Karsilastirmali model basarisi}
+\begin{table}[t]
+\caption{Model bazinda halusinasyon tespiti basarisi (n=300, 3 calistirma
+cogunluk karari). F1 araligi \%95 bootstrap guven araligini ifade eder.}
+\label{tab:overall}\small
+\begin{tabularx}{\columnwidth}{l c c c c c c c}
+\toprule
+\textbf{Model} & \textbf{Acc} & \textbf{Prec} & \textbf{Rec} & \textbf{F1}
+ & \textbf{F1 \%95 GA} & \textbf{p50 (ms)} & \textbf{USD/dogru} \\
+\midrule
+GPT-4o           & 0.847 & 0.849 & 0.983 & \textbf{0.911} & [0.885, 0.935] & 1\,394 & 0.0020 \\
+GPT-4o-mini      & 0.777 & 0.853 & 0.871 & 0.862          & [0.828, 0.893] & 1\,522 & 0.0003 \\
+Llama 3.1-8B     & 0.503 & 0.960 & 0.396 & 0.560          & [0.497, 0.621] & 2\,111 & 0.0000 \\
+Qwen2.5-7B       & 0.220 & 0.750 & 0.037 & 0.071          & [0.031, 0.117] & 2\,361 & 0.0000 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Tablo~\ref{tab:overall}'ten dort temel gozlem yapilabilir.
+\emph{Birincisi}, kapali kaynak modeller acik kaynak modelleri belirgin
+biçimde geride birakmistir: GPT-4o (F1$=0.911$) ile en yakin acik kaynak
+muadili Llama 3.1-8B (F1$=0.560$) arasindaki fark $0.35$ puandir; bu fark
+McNemar testiyle yuksek anlamlilikta dogrulanmistir (b$=141$, c$=38$,
+$\chi^2=58.12$, $p<0.001$). \emph{Ikincisi}, ayni saglayicidan secilen
+GPT-4o-mini, GPT-4o'nun \emph{yaklasik 1/8 maliyetiyle} ($0.0003 vs.\ 0.0020 /$dogru karar) F1$=0.862$
+saglamistir; bu, butce kisitli senaryolarda ``kucuk kapali model'' tercihinin
+makullugunu gosterir. \emph{Ucuncusu}, Qwen2.5-7B'nin RAG'siz kosulda
+F1$=0.071$ olmasi (Precision$=0.750$ ama Recall$=0.037$) modelin
+\emph{halusinasyon yok} kararina sapla\-nip kaldigini, neredeyse hicbir
+ornegi pozitif olarak isaretlemedigini gosterir. \emph{Dorduncusu}, tum
+modellerde JSON ayiklama hata orani \%0'dir; sistem promptu ve
+saglayici-tarafli yapilanmis cikti zorlamasi (Ollama \texttt{format=json},
+OpenAI \texttt{response\_format=json\_object}) etkili olmustur.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.95\linewidth]{../results/figures/f1_comparison.png}
+\caption{Model bazinda F1; hata cubuklari \%95 bootstrap guven araligini
+gosterir. GPT-4o (F1$=0.911$) ile en zayif acik kaynak Qwen2.5-7B
+(F1$=0.071$) arasindaki fark, RAG ablasyonu olmadan \emph{tarayici-
+gulgesi} kadar buyuktur.}
+\label{fig:f1comp}
+\end{figure}
+
+\subsection{Kategori bazinda kirilim}
+\begin{table}[t]
+\caption{Kategori bazinda F1 (one-vs-rest).}
+\label{tab:catf1}\small
+\begin{tabularx}{\columnwidth}{l X X X X X X}
+\toprule
+\textbf{Model} & \textbf{H1} & \textbf{H2} & \textbf{H3} & \textbf{H4}
+ & \textbf{H5} & \textbf{Makro} \\
+\midrule
+GPT-4o        & 0.848 & 0.743 & \textbf{0.947} & 0.592 & 0.462 & 0.718 \\
+GPT-4o-mini   & 0.283 & 0.585 & \textbf{0.938} & 0.654 & 0.571 & 0.606 \\
+Llama 3.1-8B  & 0.038 & 0.041 & 0.400          & 0.483 & \textbf{0.966} & 0.386 \\
+Qwen2.5-7B    & 0.000 & 0.062 & 0.000          & 0.000 & \textbf{0.974} & 0.207 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.95\linewidth]{../results/figures/category_f1_heatmap.png}
+\caption{Model $\times$ kategori (H1--H5) F1 isi haritasi. Sicak (mavi)
+hucreler yuksek F1; soguk (sari) hucreler dusuk F1. Acik kaynak modellerin
+H5 sutunundaki yuksek skorlari, ``her seye dogru de'' tutumunun sonucudur
+(yuksek precision, dusuk recall).}
+\label{fig:catheat}
+\end{figure}
+
+\paragraph{H3 (semantik uyumsuzluk) bekleneninin tersi:}
+Ara raporun pilotu, H3'un tum modeller icin \emph{en zorlu} kategori
+olacagini ongormustu (pilot Claude H3 F1$=0.74$; Llama F1$=0.58$). Tam veri
+kumesinde bu beklenti \emph{tersine donmustur}: GPT-4o icin H3 F1$=0.947$ ile
+en yuksek kategoridir; GPT-4o-mini H3 F1$=0.938$. Pilotun bu yaniltici
+sonucu, kucuk veri kumesinden gelen istatistiksel gurultu ile aciklanabilir;
+ayrica final benchmark'taki H3 ornekleri (alakasiz baglam pasajlari) buyuk
+modeller icin oldukca acik sinyaller iciermektedir. Aksine, \emph{kucuk
+modeller H3'te zorlanmaktadir}: Llama F1$=0.400$, Qwen F1$=0.000$.
+
+\paragraph{Asimetrik H1/H5 calibrasyonu:}
+Acik kaynak modellerin H1 (var olmayan referans) skorlari \emph{cok dusuk}
+(Llama 0.038, Qwen 0.000), buna karsin H5 (dogru referans) skorlari \emph{cok
+yuksek} (0.966, 0.974) goruluyor. Bu, modelin ``referans iyi yazilmissa
+gercektir'' onkabulune dustugunu, var olus kontrolu yapmadigini gosterir.
+GPT-4o tam tersi bir kalibrasyona sahiptir: H1$=0.848$ (mukemmel uydurma
+yakalama) ama H5$=0.462$ (gercek referansi sik sik halusinasyon olarak
+isaretliyor). Bu asimetri, RAG'in neden acik kaynak modellere muazzam
+katki sagladigini onceden haber verir: RAG, ``var olus'' sinyali sunarak H1
+zayifligini dogrudan adresler (bkz.~Bolum~\ref{sec:sonuc} 5.3).
+
+\subsection{RAG ablasyonu}
+\begin{table}[t]
+\caption{RAG'li ve RAG'siz acik kaynak modeller (n=300, 3 calistirma).}
+\label{tab:rag}\small
+\begin{tabularx}{\columnwidth}{l X X X X X}
+\toprule
+\textbf{Model} & \textbf{F1 (RAG yok)} & \textbf{F1 (RAG)}
+ & \textbf{$\Delta$F1} & \textbf{$\Delta$Precision} & \textbf{$\Delta$Recall} \\
+\midrule
+Llama 3.1-8B & 0.560 & \textbf{0.792} & \textbf{+0.231} & $-0.093$ & \textbf{+0.333} \\
+Qwen2.5-7B   & 0.071 & \textbf{0.480} & \textbf{+0.409} & $+0.168$ & \textbf{+0.288} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{figure}[t]\centering
+\includegraphics[width=0.85\linewidth]{../results/figures/rag_ablation.png}
+\caption{RAG'li ve RAG'siz F1 karsilastirmasi. Her iki acik kaynak model
+icin de $\Delta$F1 hedef esigi $+0.05$'in $5$--$8$ katidir; iyilesme
+istatistiksel olarak da yuksek anlamlilikta dogrulanmistir
+(McNemar, paired: Llama $p<0.001$, b$=38$, c$=95$;
+Qwen $p<0.001$, b$=4$, c$=69$).}
+\label{fig:rag}
+\end{figure}
+
+\paragraph{Hedef karsilandi ve fazlasiyla asildi.}
+Kriter cercevesindeki (Tablo~\ref{tab:kriter}) ``RAG katkisi $\Delta$F1
+$\geq +0.05$'' beklentisi her iki acik kaynak model icin de \emph{sirasiyla
+$4.6\times$ ve $8.2\times$} asilmistir. Sayisal olarak, Qwen2.5-7B'nin
+RAG'siz F1$=0.071$'den RAG'li F1$=0.480$'ye sicramasi, bibliyografya
+halusinasyonu tespitinde \emph{tum literaturdeki en buyuk RAG
+katkilarindan biridir}. Bu degerin yuksekligi, baseline'in cok dusuk
+olusundan da kaynaklanmakla birlikte, Qwen modeli icin RAG'in ``susgun-
+luk'' kalibrasyonunu nasil kirdiginin somut delilidir.
+
+\paragraph{Recall'da carpici sicrama, precision'da sinirli kayip.}
+Llama icin Recall $0.396 \to 0.729$ ($+0.333$); Qwen icin Recall
+$0.037 \to 0.325$ ($+0.288$). Precision tarafinda Llama hafif geriler
+($0.960 \to 0.866$, $-0.093$) cunku model artik daha cesaretli karar veriyor;
+Qwen ise Precision'da \emph{kazanir} ($0.750 \to 0.918$, $+0.168$) cunku
+RAG, bos H5 isaretlerini onlemeden once ``bu referans var mi?'' sorusuyla
+gercek pozitiflere yonlendiriyor.
+
+\paragraph{Acik kaynak + RAG, kapali kaynak farkini kapatma.}
+RAG'li Llama F1$=0.792$, GPT-4o-mini F1$=0.862$ ile sadece $0.07$ farka
+yaklasmistir; GPT-4o (F1$=0.911$) ile fark $0.12$'dir. Bu sonuc, kurumsal
+on-premise dagitim senaryolari icin onemli bir mesaj tasir: \emph{sifir API
+maliyetiyle, veri disari sizdirmadan, kapali kaynak modellerin yaklasik
+\%87 performans bandinda calisilabilir}.
+
+\subsection{Tutarlilik ve maliyet-basarim}
+\begin{figure}[t]\centering
+\includegraphics[width=0.85\linewidth]{../results/figures/cost_performance.png}
+\caption{Maliyet-basarim dengesi: x ekseni dogru karar basina maliyet (USD),
+y ekseni F1. Acik kaynak modeller x$=0$'da yer alir (yerel calistirma,
+marjinal maliyet sifir).}
+\label{fig:costperf}
+\end{figure}
+
+\paragraph{Tutarlilik cok yuksek.} Fleiss~$\kappa$ degerleri:
+GPT-4o $=0.902$, GPT-4o-mini $=0.925$, Llama 3.1-8B $=0.990$,
+Qwen2.5-7B $=1.000$. Tum modeller \texttt{temperature$=0$} altinda
+$\kappa > 0.9$ ile yuksek tutarliliga sahip; minimum hedef olarak konulan
+$\kappa \geq 0.70$ rahatlikla karsilanmistir. Qwen'in $\kappa=1.000$ degeri
+yanitlarinin determinist oldugunu, ancak \emph{ayni} (cogunlukla yanlis)
+yaniti tekrarladigini gosterir.
+
+\paragraph{Maliyet ekseni.} Tum benchmark icin GPT-4o toplam \$0.52
+harcamis, dogru karar basina \$0.0020 maliyet uretmistir. GPT-4o-mini ayni
+deney icin yalnizca \$0.06 harcamis, dogru karar basina \$0.0003 ile
+\emph{$\sim 8\times$ daha ekonomik} olmustur ama F1'i $0.05$ puan daha
+dusuk. Acik kaynak modeller sifir API maliyetiyle calismakta;
+calistirma maliyetleri yalnizca elektrik + amortismandir. RAG'li acik
+kaynak modeller, F1-maliyet diyagraminda \emph{Pareto-onucu} bir ucta
+yer alir.
+
+\paragraph{Gecikme.} P50 latency: GPT-4o $1\,394$~ms, GPT-4o-mini
+$1\,522$~ms, Llama 3.1-8B $2\,111$~ms, Qwen2.5-7B $2\,361$~ms (M2~Pro Q4
+Ollama). Kapali kaynak API'ler aglik gecikmesini iceren bu olcumde bile
+yerel modellerden hizlidir; bu, modelin boyutundan cok agir batch'lere ait
+disk I/O optimizasyonlarinin sonucudur.
+
+\subsection{Istatistiksel anlamlilik}
+\paragraph{Baseline modeller arasi.} McNemar testi (sureklilik duzeltmeli
+$\chi^2$, df$=1$), Stage 1 baseline'larinin esli kararlari uzerinde:
+
+\begin{tabularx}{\columnwidth}{X r r r l}
+\toprule
+\textbf{Cift} & \textbf{b} & \textbf{c} & $\boldsymbol{\chi^2}$ & \textbf{$p$} \\
+\midrule
+GPT-4o $\leftrightarrow$ GPT-4o-mini       & 31  & 10 & 9.76   & $0.0018$\;\textsuperscript{**} \\
+GPT-4o $\leftrightarrow$ Llama 3.1-8B      & 141 & 38 & 58.12  & ${<}\,10^{-4}$\;\textsuperscript{***} \\
+GPT-4o $\leftrightarrow$ Qwen2.5-7B        & 227 & 39 & 131.46 & ${<}\,10^{-4}$\;\textsuperscript{***} \\
+GPT-4o-mini $\leftrightarrow$ Llama 3.1-8B & 114 & 32 & 44.94  & ${<}\,10^{-4}$\;\textsuperscript{***} \\
+GPT-4o-mini $\leftrightarrow$ Qwen2.5-7B   & 200 & 33 & 118.27 & ${<}\,10^{-4}$\;\textsuperscript{***} \\
+Llama 3.1-8B $\leftrightarrow$ Qwen2.5-7B  & 87  & 2  & 79.28  & ${<}\,10^{-4}$\;\textsuperscript{***} \\
+\bottomrule
+\end{tabularx}
+
+\noindent Tum pairwise farklar $p < 0.01$ esiginde anlamlidir; b ve c
+asimetrisi modeller arasindaki sistematik fark yonlerini gosterir.
+
+\paragraph{RAG'in etkisi (paired).} Ayni model uzerinde RAG'li vs RAG'siz
+esli kararlar:
+
+\begin{tabularx}{\columnwidth}{X r r r l}
+\toprule
+\textbf{Karsilastirma} & \textbf{b} & \textbf{c} & $\boldsymbol{\chi^2}$ & \textbf{$p$} \\
+\midrule
+Llama RAG yok $\leftrightarrow$ Llama RAG var & 38 & 95 & 23.58 & ${<}\,10^{-4}$\;\textsuperscript{***} \\
+Qwen RAG yok $\leftrightarrow$ Qwen RAG var   &  4 & 69 & 56.11 & ${<}\,10^{-4}$\;\textsuperscript{***} \\
+\bottomrule
+\end{tabularx}
+
+\noindent Her iki modelde de c $\gg$ b: RAG, ``RAG'siz yanlis $\to$ RAG'li
+dogru'' donusumunu cok daha sik gerceklestirmektedir (gerileme orneklerinden
+yaklasik 2.5 ile 17.3 kat fazla).
+
+\subsection{Hata analizi (nitel)}
+\paragraph{GPT-4o (46/300 yanlis, \%15):} Hatalarin \emph{tamami} H5'te
+toplanmistir (42/60, \%70) -- yani modelin tek zayifligi gercek referansi
+\emph{halusinasyon olarak isaretleme} (false positive) egilimidir. En sik
+karisiklik: \texttt{none $\to$ H2} (28 ornek). Bu, modelin ``metadata mukemmel
+mi?'' sorusunda \emph{asiri-titiz} davrandigini gosterir: kucuk yazim
+varyasyonlari (orn.\ ``Proc.'' vs ``Proceedings of'') ve eksik DOI alanlari
+bazi gercek referanslari supheli isaretletmektedir.
+
+\paragraph{GPT-4o-mini (67/300, \%22):} Iki yonlu hata yapar -- hem H5'i
+asiri-isaretler (36/60), hem de H1 (\%23) ve H2 (\%20) ornekleri kacirir.
+Bu, kucuk modelde ``var olus dogrulamasi'' guveninin yetersizligini gosterir.
+
+\paragraph{Llama 3.1-8B (149/300, \%49):} \emph{Halusinasyon karari almaktan
+kacinma} egilimi belirgindir: H1'in \%96'sini, H2'nin \%86'sini kacirir
+(``H1$\to$none'' 77 kez en sik karisiklik). Llama, referans iyi formatli
+ise ``gercek'' diye karar veriyor. H5'te \%6 hata (yani \%94 dogru) bu
+yanliligin diger yuzudur.
+
+\paragraph{Qwen2.5-7B (234/300, \%78):} En asiri ucu sergiler: H1'in
+\emph{tamamini} (\%100), H3'un \%98'ini, H2'nin \%95'ini kacirir. \%97
+oraninda ``hallucination: false'' yaniti vermistir. Daha onceki bolumlerde
+acikladigimiz ``format kaliteciligini varsa-gercek'' kalibrasyonunun en
+saf hali.
+
+\paragraph{RAG sonrasi nasil degisti.} Llama'da en cok kazanim H1
+kategorisindedir (\%4 $\to$ \%44 F1, $+\!0.40$ delta). RAG'li retrieval,
+modele ``bu basligi/yazarlari bilgi tabaninda goremiyorum'' sinyali verdiginde,
+``halusinasyon$=$true'' karari verme ozguveni belirgin biçimde artmaktadir.
+Qwen'de iyilesme daha homojendir cunku tum kategorilerden baslangic dusuktur;
+en buyuk fayda H1 ve H2'dedir.
+
+% --- 6. Tartisma ------------------------------------------------------------
+\section{Tartisma}
+\label{sec:tartisma}
+
+\subsection{Hangi model hangi kosulda?}
+Sayisal sonuclarimiza dayanan kullanim senaryolari:
+\begin{itemize}[nosep]
+\item \textbf{Yuksek hassasiyet, kucuk hacim (akademik etik birimi,
+editor):} \emph{GPT-4o} (F1$=0.911$, $\$0.0020/$karar). Gercek bir
+referansi ``supheli'' yanlislamasi (false positive) yuksek olduundan, model
+ciktilari insan denetimine \emph{aday liste} olarak kullanilmali.
+\item \textbf{Yuksek hacim, butce kisitli (yayinevi pipeline'i):}
+\emph{GPT-4o-mini} (F1$=0.862$, $\$0.0003/$karar). 8 kat daha ucuz, sadece
+$0.05$ F1 puan kaybi. 100 bin referansli bir taramada $\$50$ yerine $\$6$.
+\item \textbf{On-premise / hassas veri (kurumsal, gizli ar-ge):}
+\emph{Llama 3.1-8B + RAG} (F1$=0.792$, $\$0$/karar). API'ye veri
+sizmadan, GPT-4o-mini'nin \%92 performans bandinda calisir; CrossRef
+korpusunun guncellenmesi sorumlulugu kurumda olur.
+\item \textbf{Hizli prototip / 16~GB kisitli is istasyonu:} Apple M2~Pro
+yerel calistirma yeterlidir; p50 latency $\sim 2$~sn'dir.
+\item \textbf{Kullanilmasi onerilmeyen:} \emph{RAG'siz Qwen2.5-7B}
+(F1$=0.071$) -- modeli yalnizca RAG ile kullanmak gerekir, aksi takdirde
+neredeyse rastgele karar verir.
+\end{itemize}
+
+\subsection{RAG katkisi: dengeli bir okuma}
+\paragraph{Buyuk olcekli kazanim, beklenen yerlerde.} En buyuk RAG kazanci
+\emph{H1} (var olmayan referans) kategorisindedir: Llama icin $+0.40$,
+Qwen icin pratik olarak $0 \to$ kismi tespit. Bu, RAG'in birincil
+mekanizmasiyla tam tutarlidir: bilgi tabaninda eslesme yoksa modele bu
+sinyal aktarilir. \emph{H2} (metadata) kategorisi de ikinci buyuk fayda
+alani olmustur, cunku kutuphanedeki gercek metadata refers'in bozulmus
+metadata'siyla karsi karsiya konulur.
+
+\paragraph{Beklenmedik: tip atfinda gerileme.} Tablo~\ref{tab:catf1}'de
+RAG'siz Llama'nin H4 F1$=0.483$ olmasi, RAG'li versiyonda $0.095$'e
+dusmustur (ayrintili rakamlar Bolum~\ref{sec:sonuc} altinda). Bu, ikili
+\emph{tespit}in dogru, ancak \emph{tip atfinin} kaymasi anlamina gelir:
+model ``evet bu bir halusinasyon'' diyor, ama H4 (yil hatasi) yerine
+\emph{H1} (uydurma) etiketi atiyor. Retrieval ipucu, modelin akil yurutmesini
+``eslesme arama'' moduna kanalize ediyor; ``yil tutarsiz'' veya ``baglam
+uyumsuz'' alt-sinyalleri zayifliyor. Bu, prompt muhendisligi yoluyla
+hafifletilebilir: chain-of-thought \cite{wei2022cot} sablonunda modele
+``once tipi listele, sonra karar ver'' yonergesi vermek, gelecek calisma
+icin acik bir hat.
+
+\paragraph{Pareto-onucu olarak ``acik kaynak + RAG''.} F1-maliyet
+diyagraminda RAG'li Llama (F1$=0.792$, \$0/karar) Pareto-onucu bolgede
+yer alir: ondan daha ucuz hicbir model yoktur, ondan daha iyi yalnizca
+ucretli kapali kaynak modeller vardir. Bu, projenin \emph{somut praktik
+katkisi}dir.
+
+\subsection{Prompt muhendisligi gozlemi}
+Pilot deneyde Qwen2.5-7B'in dusuk recall'u, modelin referans
+\emph{bicim}sel gecerliligini \emph{varlik} ile esitledigini gostermistir
+(parametric memory--only). Tam veri kumesinde bu kalibrasyon \emph{yo\u
+gunlasarak} korunmus, F1$=0.071$ ile asagi yuvarlanmistir. RAG entegrasyonu
+($+0.41$ F1) bu kalibrasyonu kismen kirsa da, ek olarak chain-of-thought
+\cite{wei2022cot} ve self-consistency \cite{wang2023selfconsistency}
+teknikleri --- ozellikle ``once tip listele'' tipi yonergeler --- gelecek
+calismada eklenebilir.
+
+\subsection{Prompt muhendisligi gozlemi}
+Pilot deneyde Qwen2.5-7B'in dusuk recall'u, modelin referans
+\emph{bicim}sel gecerliligini \emph{varlik} ile esitledigini gostermistir
+(parametric memory--only). Tam veri kumesinde bu kalibrasyonun korunmasi
+durumunda, chain-of-thought \cite{wei2022cot} ve self-consistency
+\cite{wang2023selfconsistency} teknikleri ek bir prompt-muhendisligi
+ablasyonu olarak denenebilir.
+
+\subsection{Sinirlamalar}
+\begin{itemize}[nosep]
+\item Benchmark Ingilizce ve makine ogrenmesi/siber guvenlik alaninda
+yogunlasmistir; baska disiplinlerde genelleme tartismalidir.
+\item RAG korpusu CrossRef ile siniridir; OpenAlex anahtari abstract
+zenginligine katki yapar ancak gerekli degildir.
+\item Modeller \texttt{temperature=0} ile deterministik ayardadir; sicaklik
+arttikca tutarlilik dusebilir (gelecek caliisma).
+\item Bes kategori, tum bibliyografya hatalarini kapsamaz (orn.\
+sayfa-numarasi hatasi, doi-yazim hatasi); H2 alti sinif olarak ele alinabilir.
+\end{itemize}
+
+% --- 7. Sonuc ve Gelecek Calismalar -----------------------------------------
+\section{Sonuc ve Gelecek Calismalar}
+\label{sec:gelecek}
+
+\paragraph{Genel bulgu.}
+Bes halusinasyon turunu (H1--H5) ayirt eden 300 ornekli ozgun benchmark'imiz
+uzerinde dort LLM karsilastirildiginda, kapali kaynak GPT-4o en yuksek
+performansi (F1$=0.911$) sergilemis; ayni saglayicinin kucuk modeli
+GPT-4o-mini ise yaklasik 1/8 maliyette F1$=0.862$ ile rekabetci kalmistir.
+Acik kaynak yerel modeller (Llama 3.1-8B, Qwen2.5-7B) parametric memory
+tek basina yetersizdir (sirasiyla 0.560 ve 0.071); ancak CrossRef tabanli
+bir RAG katmaniyla guclendirildiklerinde Llama F1$=0.792$ ile GPT-4o-mini'ye
+yaklasmis, Qwen ise $0.07 \to 0.48$ siçrayisi yapmistir ($\Delta$F1
+ortalama $+0.32$, McNemar paired $p<0.001$). Bibliyografya halusinasyonu
+tespitinde \emph{retrieval, kuçuk acik kaynak modelleri pratik olarak
+kullanilabilir hale getiren temel bilesendir}; veri gizliligi onemli
+oldugunda RAG'li yerel modeller, kapali kaynak modellerin yaklasik \%87
+performans bandinda \emph{sifir API maliyetiyle} calismaktadir.
+
+\paragraph{Gelecek calismalar.}
+\begin{itemize}[nosep]
+\item \textbf{Fine-tuning (LoRA/QLoRA).} 500+ ornekli H1--H5 etiketli veriyle
+acik kaynak modellerin ince ayarlanmasi (bonus, opsiyonel).
+\item \textbf{Cok dilli benchmark.} Turkce, Almanca, Cince akademik atiflara
+genisleme.
+\item \textbf{Aktif retrieval.} Modelin hangi alanlarda RAG cagirisi yapmasi
+gerektigine kendisinin karar verdigi adaptif retrieval.
+\item \textbf{Insan-makine isbirligi.} Sistemin ``supheli'' isaretledigi
+ornekleri sirayla insan denetimine getiren akilli kuyruk.
+\end{itemize}
+
+% --- Kaynakca ---------------------------------------------------------------
+\printbibliography[heading=bibnumbered, title={Kaynakca}]
+
+% =============================================================================
+\appendix
+
+\section{YZ Araçları Kullanım Notu}
+\label{appx:ai}
+Bu proje sırasında kullanılan YZ araçları, aşamaları ve sorumluluk paylaşımı:
+
+\begin{tabularx}{\columnwidth}{l l X}
+\toprule
+\textbf{Araç} & \textbf{Aşama} & \textbf{Amaç} \\
+\midrule
+Claude (Anthropic) & Kod, rapor, sunum & Repository iskeleti, rapor metni düzenleme, sunum slaytlarının hazırlanması \\
+ChatGPT (OpenAI)   & Metin             & Bazı paragraf revizyonları ve dilbilgisi kontrolü \\
+GPT-4o, GPT-4o-mini (OpenAI API) & Deney & Benchmark üzerinde değerlendirilen closed-source modeller \\
+Llama 3.1-8B, Qwen2.5-7B (Ollama) & Deney & Benchmark üzerinde değerlendirilen open-source modeller \\
+\bottomrule
+\end{tabularx}
+
+\noindent Benchmark anotasyonu, deney çalıştırma, hata analizi, raporun nihai metni
+ve sunumun nihai içeriği sorumluluğu öğrenciye aittir. YZ otomatik
+etiketlemesi ground-truth olarak kullanılmamıştır.
+
+\section{Prompt Sablonu}
+\label{appx:prompt}
+\textbf{Sistem mesaji:} ``Sen akademik referans dogrulama uzmanisin. Verilen
+referansin gercek bir akademik yayin olup olmadigini ve metadata tutarliligini
+analiz et. Su halusinasyon turlerini ayirt et: H1 = tamamen var olmayan
+referans; H2 = metadata halusinasyonu; H3 = semantik uyumsuzluk;
+H4 = kronolojik halusinasyon; none = dogru referans. Yalnizca su JSON
+semasiyla yanit ver:
+\texttt{\{"hallucination": true/false, "confidence": 0.0-1.0,
+"type": "H1|H2|H3|H4|none", "reason": "kisa gerekce"\}}.''
+
+\noindent\textbf{Kullanici mesaji:} \texttt{REFERANS:\\<girdi>\\\\(varsa)\
+ATIF BAGLAMI:\\<baglam>\\\\(varsa)\ BILGI TABANI (RAG):\\<getirilen kayitlar>\\\
+Bu referansi analiz et ve JSON karari ver.}
+
+\section{Benchmark Ornek Girdiler}
+\label{appx:benchmark}
+Her kategoriden bir ornek (\texttt{data/benchmark/benchmark.json}):
+
+\noindent\textbf{ID 1 -- H1 -- orta zorluk.}\\
+\texttt{D. Anderson, J. Halloran, H. Esposito, D. Vasquez, ``Privacy-Preserving Zero-Day Exploit Forecasting,'' in Proc.\ USENIX Security Symposium, 2024.}\\
+\textit{GT}: hallucination$=$true, type$=$H1.
+\textit{Gerekce}: Tamamen uydurma referans; bu baslik/yazar kombinasyonuna
+sahip yayimlanmis bir makale yoktur.
+
+\medskip
+\noindent\textbf{ID 81 -- H2 -- orta zorluk.}\\
+\texttt{T.~A.~Tang, L.~Mhamdi, D.~McLernon et al., ``Deep learning approach for Network Intrusion Detection in Software Defined Networking,'' in [yer], 2019. doi: 10.1109/...}\\
+\textit{GT}: hallucination$=$true, type$=$H2.
+\textit{Gerekce}: Yayin yili gercek kayittan farkli; metadata uyumsuzlugu.
+
+\medskip
+\noindent\textbf{ID 141 -- H3 -- kolay zorluk.}\\
+\texttt{H.~H.~Aghdam, E.~J.~Heravi, D.~Puig, ``Explaining Adversarial Examples by Local Properties of Convolutional Neural Networks,'' in Proc.\ Int.\ Conf., 2017.}\\
+\textit{Baglam}: \emph{``This study evaluates the carbon-sequestration capacity of mangrove forests across three coastal regions.''}\\
+\textit{GT}: hallucination$=$true, type$=$H3.
+\textit{Gerekce}: Referans gercek olsa da atif baglami (mangrov ormanlari)
+ile semantik uyumsuzluk.
+
+\medskip
+\noindent\textbf{ID 201 -- H4 -- orta zorluk.}\\
+\texttt{P.-Y.~Chen, H.~Zhang, Y.~Sharma et al., ``ZOO: Zeroth Order Optimization Based Black-Box Attacks,'' in [yer], 1995.}\\
+\textit{GT}: hallucination$=$true, type$=$H4.
+\textit{Gerekce}: 1995 tarihi imkansiz; ZOO 2017'de yayimlanmistir
+(kronolojik celiski).
+
+\medskip
+\noindent\textbf{ID 241 -- H5 -- orta zorluk.}\\
+\texttt{B.~M.~Khammas, ``Ransomware Detection using Random Forest Technique,'' in ICT Express, 2020. doi: 10.1016/j.icte.2020.11.001.}\\
+\textit{GT}: hallucination$=$false (negatif).
+\textit{Gerekce}: Tum alanlar (baslik, yazar, yil, yer, DOI) CrossRef'te
+dogrulanmistir.
+
+\section{Tekrarlanabilirlik Notu}
+\label{appx:repro}
+Tüm kod \url{https://github.com/novruzamirov/bgk601-bibhallu} adresinde MIT
+lisansıyla yayınlanmıştır. Smoke-test (internet/GPU/anahtar gerekmez):
+\texttt{bash scripts/smoke\_test.sh}. Tam pipeline icin:
+\texttt{scripts/0\_setup.sh} $\to$ \texttt{1\_build\_dataset.sh} $\to$
+\texttt{2\_run\_eval.sh} $\to$ \texttt{3\_build\_rag.sh} $\to$
+\texttt{4\_rag\_ablation.sh} $\to$ \texttt{5\_analyze.sh}.
+
+\end{document}

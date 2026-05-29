@@ -1,0 +1,56 @@
+[1/2] RAG korpusu toplaniyor (CrossRef)...
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/Users/personal/Library/Application Support/Claude/local-agent-mode-sessions/ee1b8d10-c70a-463d-b7e3-c6d1c1722b08/477a7f9f-bfd9-4b3e-a3f9-8e66562271a7/local_57ba86d5-07d0-491a-b824-69a9bc2b3542/outputs/bgk601-bibhallu/src/rag/build_corpus.py", line 97, in <module>
+    main()
+    ~~~~^^
+  File "/Users/personal/Library/Application Support/Claude/local-agent-mode-sessions/ee1b8d10-c70a-463d-b7e3-c6d1c1722b08/477a7f9f-bfd9-4b3e-a3f9-8e66562271a7/local_57ba86d5-07d0-491a-b824-69a9bc2b3542/outputs/bgk601-bibhallu/src/rag/build_corpus.py", line 58, in main
+    for item in cr.search(topic, rows=rows_per_topic):
+                ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/personal/Library/Application Support/Claude/local-agent-mode-sessions/ee1b8d10-c70a-463d-b7e3-c6d1c1722b08/477a7f9f-bfd9-4b3e-a3f9-8e66562271a7/local_57ba86d5-07d0-491a-b824-69a9bc2b3542/outputs/bgk601-bibhallu/src/dataset/crossref_client.py", line 72, in search
+    data = self._get(BASE_URL, {"query": query, "rows": rows, "filter": filter_})
+  File "/Users/personal/Library/Application Support/Claude/local-agent-mode-sessions/ee1b8d10-c70a-463d-b7e3-c6d1c1722b08/477a7f9f-bfd9-4b3e-a3f9-8e66562271a7/local_57ba86d5-07d0-491a-b824-69a9bc2b3542/outputs/bgk601-bibhallu/src/dataset/crossref_client.py", line 42, in _get
+    r = self.session.get(url, params=params, timeout=self.timeout)
+  File "/Users/personal/Library/Application Support/Claude/local-agent-mode-sessions/ee1b8d10-c70a-463d-b7e3-c6d1c1722b08/477a7f9f-bfd9-4b3e-a3f9-8e66562271a7/local_57ba86d5-07d0-491a-b824-69a9bc2b3542/outputs/bgk601-bibhallu/.venv/lib/python3.14/site-packages/requests/sessions.py", line 671, in get
+    return self.request("GET", url, params=params, **kwargs)
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/personal/Library/Application Support/Claude/local-agent-mode-sessions/ee1b8d10-c70a-463d-b7e3-c6d1c1722b08/477a7f9f-bfd9-4b3e-a3f9-8e66562271a7/local_57ba86d5-07d0-491a-b824-69a9bc2b3542/outputs/bgk601-bibhallu/.venv/lib/python3.14/site-packages/requests/sessions.py", line 651, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/Users/personal/Library/Application Support/Claude/local-agent-mode-sessions/ee1b8d10-c70a-463d-b7e3-c6d1c1722b08/477a7f9f-bfd9-4b3e-a3f9-8e66562271a7/local_57ba86d5-07d0-491a-b824-69a9bc2b3542/outputs/bgk601-bibhallu/.venv/lib/python3.14/site-packages/requests/sessions.py", line 784, in send
+    r = adapter.send(request, **kwargs)
+  File "/Users/personal/Library/Application Support/Claude/local-agent-mode-sessions/ee1b8d10-c70a-463d-b7e3-c6d1c1722b08/477a7f9f-bfd9-4b3e-a3f9-8e66562271a7/local_57ba86d5-07d0-491a-b824-69a9bc2b3542/outputs/bgk601-bibhallu/.venv/lib/python3.14/site-packages/requests/adapters.py", line 696, in send
+    resp = conn.urlopen(
+        method=request.method,
+    ...<9 lines>...
+        chunked=chunked,
+    )
+  File "/Users/personal/Library/Application Support/Claude/local-agent-mode-sessions/ee1b8d10-c70a-463d-b7e3-c6d1c1722b08/477a7f9f-bfd9-4b3e-a3f9-8e66562271a7/local_57ba86d5-07d0-491a-b824-69a9bc2b3542/outputs/bgk601-bibhallu/.venv/lib/python3.14/site-packages/urllib3/connectionpool.py", line 788, in urlopen
+    response = self._make_request(
+        conn,
+    ...<10 lines>...
+        **response_kw,
+    )
+  File "/Users/personal/Library/Application Support/Claude/local-agent-mode-sessions/ee1b8d10-c70a-463d-b7e3-c6d1c1722b08/477a7f9f-bfd9-4b3e-a3f9-8e66562271a7/local_57ba86d5-07d0-491a-b824-69a9bc2b3542/outputs/bgk601-bibhallu/.venv/lib/python3.14/site-packages/urllib3/connectionpool.py", line 534, in _make_request
+    response = conn.getresponse()
+  File "/Users/personal/Library/Application Support/Claude/local-agent-mode-sessions/ee1b8d10-c70a-463d-b7e3-c6d1c1722b08/477a7f9f-bfd9-4b3e-a3f9-8e66562271a7/local_57ba86d5-07d0-491a-b824-69a9bc2b3542/outputs/bgk601-bibhallu/.venv/lib/python3.14/site-packages/urllib3/connection.py", line 571, in getresponse
+    httplib_response = super().getresponse()
+  File "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/client.py", line 1450, in getresponse
+    response.begin()
+    ~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/client.py", line 336, in begin
+    version, status, reason = self._read_status()
+                              ~~~~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/client.py", line 297, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+               ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socket.py", line 725, in readinto
+    return self._sock.recv_into(b)
+           ~~~~~~~~~~~~~~~~~~~~^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/ssl.py", line 1304, in recv_into
+    return self.read(nbytes, buffer)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/ssl.py", line 1138, in read
+    return self._sslobj.read(len, buffer)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+KeyboardInterrupt

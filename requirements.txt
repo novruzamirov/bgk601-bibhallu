@@ -1,0 +1,20 @@
+# --- Cekirdek (degerlendirme + istatistik + grafik) ---
+pyyaml>=6.0
+requests>=2.31
+numpy>=1.24
+scikit-learn>=1.3
+matplotlib>=3.7
+
+# --- Model istemcileri (yalnizca kullandiklarinizi kurmaniz yeterli) ---
+openai>=1.30            # GPT-4o (OPENAI_API_KEY)
+anthropic>=0.39         # Claude (ANTHROPIC_API_KEY)
+google-generativeai>=0.7  # Gemini (GOOGLE_API_KEY, ucretsiz katman)
+# Ollama icin ek paket gerekmez; HTTP ile localhost:11434
+
+# --- RAG ---
+chromadb>=0.5
+sentence-transformers>=2.7
+langchain>=0.2          # opsiyonel pipeline yardimcilari
+
+# --- Test (opsiyonel) ---
+pytest>=8.0

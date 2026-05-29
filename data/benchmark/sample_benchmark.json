@@ -1,0 +1,818 @@
+[
+  {
+    "id": 1,
+    "kategori": "H1",
+    "zorluk": "orta",
+    "girdi": "D. Anderson, J. Halloran, H. Esposito, D. Vasquez, \"Privacy-Preserving Zero-Day Exploit Forecasting,\" in Proc. USENIX Security Symposium, 2024.",
+    "baglam": "",
+    "beklenen_cevap": {
+      "hallucination": true,
+      "type": "H1",
+      "reason": "Tamamen uydurma referans: bu baslik/yazar kombinasyonuna sahip yayimlanmis bir makale yoktur."
+    },
+    "metadata": {
+      "title": "Privacy-Preserving Zero-Day Exploit Forecasting",
+      "authors": [
+        "D. Anderson",
+        "J. Halloran",
+        "H. Esposito",
+        "D. Vasquez"
+      ],
+      "year": 2024,
+      "venue": "Proc. USENIX Security Symposium",
+      "doi": null
+    },
+    "kaynak": "synthetic",
+    "aciklama": "Sentetik olarak uretilmis, hicbir veritabaninda bulunmayan referans.",
+    "verified": false
+  },
+  {
+    "id": 2,
+    "kategori": "H1",
+    "zorluk": "orta",
+    "girdi": "C. Grimaldi, H. Quintana, \"Probabilistic Intrusion Detection in IoT Networks,\" in Proc. Network and Distributed System Security Symposium (NDSS), 2023.",
+    "baglam": "",
+    "beklenen_cevap": {
+      "hallucination": true,
+      "type": "H1",
+      "reason": "Tamamen uydurma referans: bu baslik/yazar kombinasyonuna sahip yayimlanmis bir makale yoktur."
+    },
+    "metadata": {
+      "title": "Probabilistic Intrusion Detection in IoT Networks",
+      "authors": [
+        "C. Grimaldi",
+        "H. Quintana"
+      ],
+      "year": 2023,
+      "venue": "Proc. Network and Distributed System Security Symposium (NDSS)",
+      "doi": null
+    },
+    "kaynak": "synthetic",
+    "aciklama": "Sentetik olarak uretilmis, hicbir veritabaninda bulunmayan referans.",
+    "verified": false
+  },
+  {
+    "id": 3,
+    "kategori": "H1",
+    "zorluk": "kolay",
+    "girdi": "J. Anderson, F. Whitmore, P. Kowalski, \"Adversarial Phishing URL Detection,\" in Proc. Network and Distributed System Security Symposium (NDSS), 2020.",
+    "baglam": "",
+    "beklenen_cevap": {
+      "hallucination": true,
+      "type": "H1",
+      "reason": "Tamamen uydurma referans: bu baslik/yazar kombinasyonuna sahip yayimlanmis bir makale yoktur."
+    },
+    "metadata": {
+      "title": "Adversarial Phishing URL Detection",
+      "authors": [
+        "J. Anderson",
+        "F. Whitmore",
+        "P. Kowalski"
+      ],
+      "year": 2020,
+      "venue": "Proc. Network and Distributed System Security Symposium (NDSS)",
+      "doi": null
+    },
+    "kaynak": "synthetic",
+    "aciklama": "Sentetik olarak uretilmis, hicbir veritabaninda bulunmayan referans.",
+    "verified": false
+  },
+  {
+    "id": 4,
+    "kategori": "H1",
+    "zorluk": "kolay",
+    "girdi": "D. Lindqvist, M. Tanaka, J. Bryant, \"Privacy-Preserving Ransomware Behavior Modeling,\" in Proc. USENIX Security Symposium, 2021.",
+    "baglam": "",
+    "beklenen_cevap": {
+      "hallucination": true,
+      "type": "H1",
+      "reason": "Tamamen uydurma referans: bu baslik/yazar kombinasyonuna sahip yayimlanmis bir makale yoktur."
+    },
+    "metadata": {
+      "title": "Privacy-Preserving Ransomware Behavior Modeling",
+      "authors": [
+        "D. Lindqvist",
+        "M. Tanaka",
+        "J. Bryant"
+      ],
+      "year": 2021,
+      "venue": "Proc. USENIX Security Symposium",
+      "doi": null
+    },
+    "kaynak": "synthetic",
+    "aciklama": "Sentetik olarak uretilmis, hicbir veritabaninda bulunmayan referans.",
+    "verified": false
+  },
+  {
+    "id": 5,
+    "kategori": "H1",
+    "zorluk": "zor",
+    "girdi": "M. Saltykov, G. Whitmore, C. Bryant, \"Real-Time Side-Channel Leakage Quantification,\" in IEEE Transactions on Information Forensics and Security, 2016.",
+    "baglam": "",
+    "beklenen_cevap": {
+      "hallucination": true,
+      "type": "H1",
+      "reason": "Tamamen uydurma referans: bu baslik/yazar kombinasyonuna sahip yayimlanmis bir makale yoktur."
+    },
+    "metadata": {
+      "title": "Real-Time Side-Channel Leakage Quantification",
+      "authors": [
+        "M. Saltykov",
+        "G. Whitmore",
+        "C. Bryant"
+      ],
+      "year": 2016,
+      "venue": "IEEE Transactions on Information Forensics and Security",
+      "doi": null
+    },
+    "kaynak": "synthetic",
+    "aciklama": "Sentetik olarak uretilmis, hicbir veritabaninda bulunmayan referans.",
+    "verified": false
+  },
+  {
+    "id": 6,
+    "kategori": "H1",
+    "zorluk": "orta",
+    "girdi": "N. Iverson, R. Underwood, \"End-to-End Encrypted Traffic Analysis,\" in Proc. ACM Conf. on Computer and Communications Security (CCS), 2020.",
+    "baglam": "",
+    "beklenen_cevap": {
+      "hallucination": true,
+      "type": "H1",
+      "reason": "Tamamen uydurma referans: bu baslik/yazar kombinasyonuna sahip yayimlanmis bir makale yoktur."
+    },
+    "metadata": {
+      "title": "End-to-End Encrypted Traffic Analysis",
+      "authors": [
+        "N. Iverson",
+        "R. Underwood"
+      ],
+      "year": 2020,
+      "venue": "Proc. ACM Conf. on Computer and Communications Security (CCS)",
+      "doi": null
+    },
+    "kaynak": "synthetic",
+    "aciklama": "Sentetik olarak uretilmis, hicbir veritabaninda bulunmayan referans.",
+    "verified": false
+  },
+  {
+    "id": 7,
+    "kategori": "H2",
+    "zorluk": "orta",
+    "girdi": "I. Sutskever, O. Vinyals, Q. V. Le, \"Sequence to Sequence Learning with Neural Networks,\" in Proc. USENIX Security Symposium, 2014.",
+    "baglam": "",
+    "beklenen_cevap": {
+      "hallucination": true,
+      "type": "H2",
+      "reason": "Yayin yeri (dergi/konferans) gercek kayitla celisiyor."
+    },
+    "metadata": {
+      "title": "Sequence to Sequence Learning with Neural Networks",
+      "authors": [
+        "I. Sutskever",
+        "O. Vinyals",
+        "Q. V. Le"
+      ],
+      "year": 2014,
+      "venue": "Proc. USENIX Security Symposium",
+      "doi": null,
+      "kaynak": "seed"
+    },
+    "kaynak": "seed",
+    "aciklama": "Gercek makalenin 'venue' alani kasitli olarak bozuldu.",
+    "verified": false
+  },
+  {
+    "id": 8,
+    "kategori": "H2",
+    "zorluk": "orta",
+    "girdi": "R. Shokri, M. Stronati, C. Song, V. Shmatikov, \"Membership Inference Attacks Against Machine Learning Models,\" in Proc. ACM Conf. on Computer and Communications Security (CCS), 2017.",
+    "baglam": "",
+    "beklenen_cevap": {
+      "hallucination": true,
+      "type": "H2",
+      "reason": "Yayin yeri (dergi/konferans) gercek kayitla celisiyor."
+    },
+    "metadata": {
+      "title": "Membership Inference Attacks Against Machine Learning Models",
+      "authors": [
+        "R. Shokri",
+        "M. Stronati",
+        "C. Song",
+        "V. Shmatikov"
+      ],
+      "year": 2017,
+      "venue": "Proc. ACM Conf. on Computer and Communications Security (CCS)",
+      "doi": null,
+      "kaynak": "seed"
+    },
+    "kaynak": "seed",
+    "aciklama": "Gercek makalenin 'venue' alani kasitli olarak bozuldu.",
+    "verified": false
+  },
+  {
+    "id": 9,
+    "kategori": "H2",
+    "zorluk": "orta",
+    "girdi": "I. J. Goodfellow, J. Shlens, C. Szegedy, \"Explaining and Harnessing Adversarial Examples,\" in Proc. Network and Distributed System Security Symposium (NDSS), 2015.",
+    "baglam": "",
+    "beklenen_cevap": {
+      "hallucination": true,
+      "type": "H2",
+      "reason": "Yayin yeri (dergi/konferans) gercek kayitla celisiyor."
+    },
+    "metadata": {
+      "title": "Explaining and Harnessing Adversarial Examples",
+      "authors": [
+        "I. J. Goodfellow",
+        "J. Shlens",
+        "C. Szegedy"
+      ],
+      "year": 2015,
+      "venue": "Proc. Network and Distributed System Security Symposium (NDSS)",
+      "doi": null,
+      "kaynak": "seed"
+    },
+    "kaynak": "seed",
+    "aciklama": "Gercek makalenin 'venue' alani kasitli olarak bozuldu.",
+    "verified": false
+  },
+  {
+    "id": 10,
+    "kategori": "H2",
+    "zorluk": "orta",
+    "girdi": "A. Krizhevsky, I. Sutskever, G. E. Hinton, \"ImageNet Classification with Deep Convolutional Neural Networks,\" in Advances in Neural Information Processing Systems (NeurIPS), 2014.",
+    "baglam": "",
+    "beklenen_cevap": {
+      "hallucination": true,
+      "type": "H2",
+      "reason": "Yayin yili gercek kayittan farkli (metadata uyumsuzlugu)."
+    },
+    "metadata": {
+      "title": "ImageNet Classification with Deep Convolutional Neural Networks",
+      "authors": [
+        "A. Krizhevsky",
+        "I. Sutskever",
+        "G. E. Hinton"
+      ],
+      "year": 2014,
+      "venue": "Advances in Neural Information Processing Systems (NeurIPS)",
+      "doi": null,
+      "kaynak": "seed"
+    },
+    "kaynak": "seed",
+    "aciklama": "Gercek makalenin 'year' alani kasitli olarak bozuldu.",
+    "verified": false
+  },
+  {
+    "id": 11,
+    "kategori": "H2",
+    "zorluk": "orta",
+    "girdi": "I. Sutskever, O. Vinyals, Q. V. Le, \"Sequence to Sequence Learning with Neural Networks,\" in Proc. Network and Distributed System Security Symposium (NDSS), 2014.",
+    "baglam": "",
+    "beklenen_cevap": {
+      "hallucination": true,
+      "type": "H2",
+      "reason": "Yayin yeri (dergi/konferans) gercek kayitla celisiyor."
+    },
+    "metadata": {
+      "title": "Sequence to Sequence Learning with Neural Networks",
+      "authors": [
+        "I. Sutskever",
+        "O. Vinyals",
+        "Q. V. Le"
+      ],
+      "year": 2014,
+      "venue": "Proc. Network and Distributed System Security Symposium (NDSS)",
+      "doi": null,
+      "kaynak": "seed"
+    },
+    "kaynak": "seed",
+    "aciklama": "Gercek makalenin 'venue' alani kasitli olarak bozuldu.",
+    "verified": false
+  },
+  {
+    "id": 12,
+    "kategori": "H2",
+    "zorluk": "orta",
+    "girdi": "H. Bryant, I. Sutskever, K. Chen, G. Corrado, \"Distributed Representations of Words and Phrases and their Compositionality,\" in Advances in Neural Information Processing Systems (NeurIPS), 2013.",
+    "baglam": "",
+    "beklenen_cevap": {
+      "hallucination": true,
+      "type": "H2",
+      "reason": "Birinci yazar yanlis: bu makalenin gercek yazar listesiyle uyusmuyor."
+    },
+    "metadata": {
+      "title": "Distributed Representations of Words and Phrases and their Compositionality",
+      "authors": [
+        "H. Bryant",
+        "I. Sutskever",
+        "K. Chen",
+        "G. Corrado"
+      ],
+      "year": 2013,
+      "venue": "Advances in Neural Information Processing Systems (NeurIPS)",
+      "doi": null,
+      "kaynak": "seed"
+    },
+    "kaynak": "seed",
+    "aciklama": "Gercek makalenin 'author' alani kasitli olarak bozuldu.",
+    "verified": false
+  },
+  {
+    "id": 13,
+    "kategori": "H3",
+    "zorluk": "orta",
+    "girdi": "T. Mikolov, I. Sutskever, K. Chen, G. Corrado, \"Distributed Representations of Words and Phrases and their Compositionality,\" in Advances in Neural Information Processing Systems (NeurIPS), 2013.",
+    "baglam": "The paper introduces a finite-element model for predicting fatigue fractures in titanium aerospace components.",
+    "beklenen_cevap": {
+      "hallucination": true,
+      "type": "H3",
+      "reason": "Referans gercek olsa da, atif yapilan baglamin konusuyla anlamsal olarak ilgisiz (semantik uyumsuzluk)."
+    },
+    "metadata": {
+      "title": "Distributed Representations of Words and Phrases and their Compositionality",
+      "authors": [
+        "T. Mikolov",
+        "I. Sutskever",
+        "K. Chen",
+        "G. Corrado"
+      ],
+      "year": 2013,
+      "venue": "Advances in Neural Information Processing Systems (NeurIPS)",
+      "doi": null,
+      "kaynak": "seed"
+    },
+    "kaynak": "seed",
+    "aciklama": "Gercek makale, konusuyla alakasiz bir atif baglamina yerlestirildi.",
+    "verified": false
+  },
+  {
+    "id": 14,
+    "kategori": "H3",
+    "zorluk": "zor",
+    "girdi": "T. B. Brown, B. Mann, N. Ryder, M. Subbiah, \"Language Models are Few-Shot Learners,\" in Advances in Neural Information Processing Systems (NeurIPS), 2020.",
+    "baglam": "Our contribution is a phonological analysis of vowel shifts in Medieval English manuscripts.",
+    "beklenen_cevap": {
+      "hallucination": true,
+      "type": "H3",
+      "reason": "Referans gercek olsa da, atif yapilan baglamin konusuyla anlamsal olarak ilgisiz (semantik uyumsuzluk)."
+    },
+    "metadata": {
+      "title": "Language Models are Few-Shot Learners",
+      "authors": [
+        "T. B. Brown",
+        "B. Mann",
+        "N. Ryder",
+        "M. Subbiah"
+      ],
+      "year": 2020,
+      "venue": "Advances in Neural Information Processing Systems (NeurIPS)",
+      "doi": null,
+      "kaynak": "seed"
+    },
+    "kaynak": "seed",
+    "aciklama": "Gercek makale, konusuyla alakasiz bir atif baglamina yerlestirildi.",
+    "verified": false
+  },
+  {
+    "id": 15,
+    "kategori": "H3",
+    "zorluk": "zor",
+    "girdi": "T. Mikolov, I. Sutskever, K. Chen, G. Corrado, \"Distributed Representations of Words and Phrases and their Compositionality,\" in Advances in Neural Information Processing Systems (NeurIPS), 2013.",
+    "baglam": "This work investigates the thermodynamic properties of perovskite solar cells under high-temperature operating conditions.",
+    "beklenen_cevap": {
+      "hallucination": true,
+      "type": "H3",
+      "reason": "Referans gercek olsa da, atif yapilan baglamin konusuyla anlamsal olarak ilgisiz (semantik uyumsuzluk)."
+    },
+    "metadata": {
+      "title": "Distributed Representations of Words and Phrases and their Compositionality",
+      "authors": [
+        "T. Mikolov",
+        "I. Sutskever",
+        "K. Chen",
+        "G. Corrado"
+      ],
+      "year": 2013,
+      "venue": "Advances in Neural Information Processing Systems (NeurIPS)",
+      "doi": null,
+      "kaynak": "seed"
+    },
+    "kaynak": "seed",
+    "aciklama": "Gercek makale, konusuyla alakasiz bir atif baglamina yerlestirildi.",
+    "verified": false
+  },
+  {
+    "id": 16,
+    "kategori": "H3",
+    "zorluk": "orta",
+    "girdi": "P. Kocher, J. Horn, A. Fogh, D. Genkin, \"Spectre Attacks: Exploiting Speculative Execution,\" in Proc. IEEE Symposium on Security and Privacy (S&P), 2019.",
+    "baglam": "This study evaluates the carbon-sequestration capacity of mangrove forests across three coastal regions.",
+    "beklenen_cevap": {
+      "hallucination": true,
+      "type": "H3",
+      "reason": "Referans gercek olsa da, atif yapilan baglamin konusuyla anlamsal olarak ilgisiz (semantik uyumsuzluk)."
+    },
+    "metadata": {
+      "title": "Spectre Attacks: Exploiting Speculative Execution",
+      "authors": [
+        "P. Kocher",
+        "J. Horn",
+        "A. Fogh",
+        "D. Genkin"
+      ],
+      "year": 2019,
+      "venue": "Proc. IEEE Symposium on Security and Privacy (S&P)",
+      "doi": null,
+      "kaynak": "seed"
+    },
+    "kaynak": "seed",
+    "aciklama": "Gercek makale, konusuyla alakasiz bir atif baglamina yerlestirildi.",
+    "verified": false
+  },
+  {
+    "id": 17,
+    "kategori": "H3",
+    "zorluk": "orta",
+    "girdi": "I. Sutskever, O. Vinyals, Q. V. Le, \"Sequence to Sequence Learning with Neural Networks,\" in Advances in Neural Information Processing Systems (NeurIPS), 2014.",
+    "baglam": "This work investigates the thermodynamic properties of perovskite solar cells under high-temperature operating conditions.",
+    "beklenen_cevap": {
+      "hallucination": true,
+      "type": "H3",
+      "reason": "Referans gercek olsa da, atif yapilan baglamin konusuyla anlamsal olarak ilgisiz (semantik uyumsuzluk)."
+    },
+    "metadata": {
+      "title": "Sequence to Sequence Learning with Neural Networks",
+      "authors": [
+        "I. Sutskever",
+        "O. Vinyals",
+        "Q. V. Le"
+      ],
+      "year": 2014,
+      "venue": "Advances in Neural Information Processing Systems (NeurIPS)",
+      "doi": null,
+      "kaynak": "seed"
+    },
+    "kaynak": "seed",
+    "aciklama": "Gercek makale, konusuyla alakasiz bir atif baglamina yerlestirildi.",
+    "verified": false
+  },
+  {
+    "id": 18,
+    "kategori": "H3",
+    "zorluk": "orta",
+    "girdi": "I. J. Goodfellow, J. Shlens, C. Szegedy, \"Explaining and Harnessing Adversarial Examples,\" in Proc. Int. Conf. on Learning Representations (ICLR), 2015.",
+    "baglam": "Our contribution is a phonological analysis of vowel shifts in Medieval English manuscripts.",
+    "beklenen_cevap": {
+      "hallucination": true,
+      "type": "H3",
+      "reason": "Referans gercek olsa da, atif yapilan baglamin konusuyla anlamsal olarak ilgisiz (semantik uyumsuzluk)."
+    },
+    "metadata": {
+      "title": "Explaining and Harnessing Adversarial Examples",
+      "authors": [
+        "I. J. Goodfellow",
+        "J. Shlens",
+        "C. Szegedy"
+      ],
+      "year": 2015,
+      "venue": "Proc. Int. Conf. on Learning Representations (ICLR)",
+      "doi": null,
+      "kaynak": "seed"
+    },
+    "kaynak": "seed",
+    "aciklama": "Gercek makale, konusuyla alakasiz bir atif baglamina yerlestirildi.",
+    "verified": false
+  },
+  {
+    "id": 19,
+    "kategori": "H4",
+    "zorluk": "orta",
+    "girdi": "N. Papernot, P. McDaniel, I. Goodfellow, S. Jha, \"Practical Black-Box Attacks against Machine Learning,\" in Proc. ACM Asia Conf. on Computer and Communications Security (ASIACCS), 1995.",
+    "baglam": "",
+    "beklenen_cevap": {
+      "hallucination": true,
+      "type": "H4",
+      "reason": "Yayin yili, konunun/teknolojinin var olusundan once (kronolojik celiski)."
+    },
+    "metadata": {
+      "title": "Practical Black-Box Attacks against Machine Learning",
+      "authors": [
+        "N. Papernot",
+        "P. McDaniel",
+        "I. Goodfellow",
+        "S. Jha"
+      ],
+      "year": 1995,
+      "venue": "Proc. ACM Asia Conf. on Computer and Communications Security (ASIACCS)",
+      "doi": null,
+      "kaynak": "seed"
+    },
+    "kaynak": "seed",
+    "aciklama": "Gercek makaleye kronolojik olarak imkansiz yil atandi (impossible_before).",
+    "verified": false
+  },
+  {
+    "id": 20,
+    "kategori": "H4",
+    "zorluk": "orta",
+    "girdi": "P. Kocher, J. Horn, A. Fogh, D. Genkin, \"Spectre Attacks: Exploiting Speculative Execution,\" in Proc. IEEE Symposium on Security and Privacy (S&P), 1985.",
+    "baglam": "",
+    "beklenen_cevap": {
+      "hallucination": true,
+      "type": "H4",
+      "reason": "Yayin yili, konunun/teknolojinin var olusundan once (kronolojik celiski)."
+    },
+    "metadata": {
+      "title": "Spectre Attacks: Exploiting Speculative Execution",
+      "authors": [
+        "P. Kocher",
+        "J. Horn",
+        "A. Fogh",
+        "D. Genkin"
+      ],
+      "year": 1985,
+      "venue": "Proc. IEEE Symposium on Security and Privacy (S&P)",
+      "doi": null,
+      "kaynak": "seed"
+    },
+    "kaynak": "seed",
+    "aciklama": "Gercek makaleye kronolojik olarak imkansiz yil atandi (impossible_before).",
+    "verified": false
+  },
+  {
+    "id": 21,
+    "kategori": "H4",
+    "zorluk": "orta",
+    "girdi": "D. P. Kingma, J. Ba, \"Adam: A Method for Stochastic Optimization,\" in Proc. Int. Conf. on Learning Representations (ICLR), 1985.",
+    "baglam": "",
+    "beklenen_cevap": {
+      "hallucination": true,
+      "type": "H4",
+      "reason": "Yayin yili, konunun/teknolojinin var olusundan once (kronolojik celiski)."
+    },
+    "metadata": {
+      "title": "Adam: A Method for Stochastic Optimization",
+      "authors": [
+        "D. P. Kingma",
+        "J. Ba"
+      ],
+      "year": 1985,
+      "venue": "Proc. Int. Conf. on Learning Representations (ICLR)",
+      "doi": null,
+      "kaynak": "seed"
+    },
+    "kaynak": "seed",
+    "aciklama": "Gercek makaleye kronolojik olarak imkansiz yil atandi (impossible_before).",
+    "verified": false
+  },
+  {
+    "id": 22,
+    "kategori": "H4",
+    "zorluk": "kolay",
+    "girdi": "J. Devlin, M.-W. Chang, K. Lee, K. Toutanova, \"BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding,\" in Proc. NAACL-HLT, 2028.",
+    "baglam": "",
+    "beklenen_cevap": {
+      "hallucination": true,
+      "type": "H4",
+      "reason": "Yayin yili gelecekte (imkansiz tarih)."
+    },
+    "metadata": {
+      "title": "BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding",
+      "authors": [
+        "J. Devlin",
+        "M.-W. Chang",
+        "K. Lee",
+        "K. Toutanova"
+      ],
+      "year": 2028,
+      "venue": "Proc. NAACL-HLT",
+      "doi": null,
+      "kaynak": "seed"
+    },
+    "kaynak": "seed",
+    "aciklama": "Gercek makaleye kronolojik olarak imkansiz yil atandi (future).",
+    "verified": false
+  },
+  {
+    "id": 23,
+    "kategori": "H4",
+    "zorluk": "orta",
+    "girdi": "A. Krizhevsky, I. Sutskever, G. E. Hinton, \"ImageNet Classification with Deep Convolutional Neural Networks,\" in Advances in Neural Information Processing Systems (NeurIPS), 1995.",
+    "baglam": "",
+    "beklenen_cevap": {
+      "hallucination": true,
+      "type": "H4",
+      "reason": "Yayin yili, konunun/teknolojinin var olusundan once (kronolojik celiski)."
+    },
+    "metadata": {
+      "title": "ImageNet Classification with Deep Convolutional Neural Networks",
+      "authors": [
+        "A. Krizhevsky",
+        "I. Sutskever",
+        "G. E. Hinton"
+      ],
+      "year": 1995,
+      "venue": "Advances in Neural Information Processing Systems (NeurIPS)",
+      "doi": null,
+      "kaynak": "seed"
+    },
+    "kaynak": "seed",
+    "aciklama": "Gercek makaleye kronolojik olarak imkansiz yil atandi (impossible_before).",
+    "verified": false
+  },
+  {
+    "id": 24,
+    "kategori": "H4",
+    "zorluk": "orta",
+    "girdi": "K. He, X. Zhang, S. Ren, J. Sun, \"Deep Residual Learning for Image Recognition,\" in Proc. IEEE Conf. on Computer Vision and Pattern Recognition (CVPR), 1990.",
+    "baglam": "",
+    "beklenen_cevap": {
+      "hallucination": true,
+      "type": "H4",
+      "reason": "Yayin yili, konunun/teknolojinin var olusundan once (kronolojik celiski)."
+    },
+    "metadata": {
+      "title": "Deep Residual Learning for Image Recognition",
+      "authors": [
+        "K. He",
+        "X. Zhang",
+        "S. Ren",
+        "J. Sun"
+      ],
+      "year": 1990,
+      "venue": "Proc. IEEE Conf. on Computer Vision and Pattern Recognition (CVPR)",
+      "doi": null,
+      "kaynak": "seed"
+    },
+    "kaynak": "seed",
+    "aciklama": "Gercek makaleye kronolojik olarak imkansiz yil atandi (impossible_before).",
+    "verified": false
+  },
+  {
+    "id": 25,
+    "kategori": "H5",
+    "zorluk": "zor",
+    "girdi": "T. B. Brown, B. Mann, N. Ryder, M. Subbiah, \"Language Models are Few-Shot Learners,\" in Advances in Neural Information Processing Systems (NeurIPS), 2020.",
+    "baglam": "",
+    "beklenen_cevap": {
+      "hallucination": false,
+      "type": "none",
+      "reason": "Tum alanlar (baslik, yazar, yil, yer) dogrulanmis; halusinasyon yok."
+    },
+    "metadata": {
+      "title": "Language Models are Few-Shot Learners",
+      "authors": [
+        "T. B. Brown",
+        "B. Mann",
+        "N. Ryder",
+        "M. Subbiah"
+      ],
+      "year": 2020,
+      "venue": "Advances in Neural Information Processing Systems (NeurIPS)",
+      "doi": null,
+      "kaynak": "seed"
+    },
+    "kaynak": "seed",
+    "aciklama": "Dogrulanmis gercek referans (negatif ornek).",
+    "verified": false
+  },
+  {
+    "id": 26,
+    "kategori": "H5",
+    "zorluk": "orta",
+    "girdi": "S. Hochreiter, J. Schmidhuber, \"Long Short-Term Memory,\" in Neural Computation, 1997.",
+    "baglam": "",
+    "beklenen_cevap": {
+      "hallucination": false,
+      "type": "none",
+      "reason": "Tum alanlar (baslik, yazar, yil, yer) dogrulanmis; halusinasyon yok."
+    },
+    "metadata": {
+      "title": "Long Short-Term Memory",
+      "authors": [
+        "S. Hochreiter",
+        "J. Schmidhuber"
+      ],
+      "year": 1997,
+      "venue": "Neural Computation",
+      "doi": null,
+      "kaynak": "seed"
+    },
+    "kaynak": "seed",
+    "aciklama": "Dogrulanmis gercek referans (negatif ornek).",
+    "verified": false
+  },
+  {
+    "id": 27,
+    "kategori": "H5",
+    "zorluk": "orta",
+    "girdi": "Z. Durumeric, F. Li, J. Kasten, J. Amann, \"The Matter of Heartbleed,\" in Proc. ACM Internet Measurement Conference (IMC), 2014.",
+    "baglam": "",
+    "beklenen_cevap": {
+      "hallucination": false,
+      "type": "none",
+      "reason": "Tum alanlar (baslik, yazar, yil, yer) dogrulanmis; halusinasyon yok."
+    },
+    "metadata": {
+      "title": "The Matter of Heartbleed",
+      "authors": [
+        "Z. Durumeric",
+        "F. Li",
+        "J. Kasten",
+        "J. Amann"
+      ],
+      "year": 2014,
+      "venue": "Proc. ACM Internet Measurement Conference (IMC)",
+      "doi": null,
+      "kaynak": "seed"
+    },
+    "kaynak": "seed",
+    "aciklama": "Dogrulanmis gercek referans (negatif ornek).",
+    "verified": false
+  },
+  {
+    "id": 28,
+    "kategori": "H5",
+    "zorluk": "kolay",
+    "girdi": "M. Lipp, M. Schwarz, D. Gruss, T. Prescher, \"Meltdown: Reading Kernel Memory from User Space,\" in Proc. USENIX Security Symposium, 2018.",
+    "baglam": "",
+    "beklenen_cevap": {
+      "hallucination": false,
+      "type": "none",
+      "reason": "Tum alanlar (baslik, yazar, yil, yer) dogrulanmis; halusinasyon yok."
+    },
+    "metadata": {
+      "title": "Meltdown: Reading Kernel Memory from User Space",
+      "authors": [
+        "M. Lipp",
+        "M. Schwarz",
+        "D. Gruss",
+        "T. Prescher"
+      ],
+      "year": 2018,
+      "venue": "Proc. USENIX Security Symposium",
+      "doi": null,
+      "kaynak": "seed"
+    },
+    "kaynak": "seed",
+    "aciklama": "Dogrulanmis gercek referans (negatif ornek).",
+    "verified": false
+  },
+  {
+    "id": 29,
+    "kategori": "H5",
+    "zorluk": "orta",
+    "girdi": "P. Lewis, E. Perez, A. Piktus, F. Petroni, \"Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks,\" in Advances in Neural Information Processing Systems (NeurIPS), 2020.",
+    "baglam": "",
+    "beklenen_cevap": {
+      "hallucination": false,
+      "type": "none",
+      "reason": "Tum alanlar (baslik, yazar, yil, yer) dogrulanmis; halusinasyon yok."
+    },
+    "metadata": {
+      "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+      "authors": [
+        "P. Lewis",
+        "E. Perez",
+        "A. Piktus",
+        "F. Petroni"
+      ],
+      "year": 2020,
+      "venue": "Advances in Neural Information Processing Systems (NeurIPS)",
+      "doi": null,
+      "kaynak": "seed"
+    },
+    "kaynak": "seed",
+    "aciklama": "Dogrulanmis gercek referans (negatif ornek).",
+    "verified": false
+  },
+  {
+    "id": 30,
+    "kategori": "H5",
+    "zorluk": "zor",
+    "girdi": "I. Goodfellow, J. Pouget-Abadie, M. Mirza, B. Xu, \"Generative Adversarial Nets,\" in Advances in Neural Information Processing Systems (NeurIPS), 2014.",
+    "baglam": "",
+    "beklenen_cevap": {
+      "hallucination": false,
+      "type": "none",
+      "reason": "Tum alanlar (baslik, yazar, yil, yer) dogrulanmis; halusinasyon yok."
+    },
+    "metadata": {
+      "title": "Generative Adversarial Nets",
+      "authors": [
+        "I. Goodfellow",
+        "J. Pouget-Abadie",
+        "M. Mirza",
+        "B. Xu"
+      ],
+      "year": 2014,
+      "venue": "Advances in Neural Information Processing Systems (NeurIPS)",
+      "doi": null,
+      "kaynak": "seed"
+    },
+    "kaynak": "seed",
+    "aciklama": "Dogrulanmis gercek referans (negatif ornek).",
+    "verified": false
+  }
+]

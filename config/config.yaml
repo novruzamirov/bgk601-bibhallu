@@ -1,0 +1,67 @@
+# config.yaml -- Model portfoyu ve degerlendirme ayarlari
+# Proje gereksinimi: >=4 model (>=2 kapali kaynak API + >=2 acik kaynak yerel).
+
+models:
+  # --- Kapali kaynak (API) -- ikisi de tek OPENAI_API_KEY ile ---
+  - name: "GPT-4o"
+    provider: openai            # OPENAI_API_KEY gerekir
+    model: "gpt-4o"
+    kind: closed
+    cost_per_1k_tokens: 0.0050  # tahmini; faturadan guncelleyin
+    mock_accuracy: 0.88         # yalnizca --mock modunda kullanilir
+
+  - name: "GPT-4o-mini"
+    provider: openai            # ayni OPENAI_API_KEY; ucuz "kucuk kapali model"
+    model: "gpt-4o-mini"
+    kind: closed
+    cost_per_1k_tokens: 0.0006  # tahmini; faturadan guncelleyin
+    mock_accuracy: 0.82
+
+  # Butce/anahtar olunca eklenebilecek alternatifler:
+  # - name: "Gemini 1.5 Flash"   # GOOGLE_API_KEY (ucretsiz katman)
+  #   provider: gemini
+  #   model: "gemini-1.5-flash"
+  #   kind: closed
+  #   cost_per_1k_tokens: 0.0
+  #   mock_accuracy: 0.83
+  # - name: "Claude Sonnet 4.5"  # ANTHROPIC_API_KEY
+  #   provider: anthropic
+  #   model: "claude-sonnet-4-5"
+  #   kind: closed
+  #   cost_per_1k_tokens: 0.0040
+  #   mock_accuracy: 0.90
+
+  # --- Acik kaynak (yerel, Ollama) ---
+  - name: "Llama 3.1-8B"
+    provider: ollama            # ollama pull llama3.1:8b  (sende MEVCUT)
+    model: "llama3.1:8b"
+    kind: open
+    num_ctx: 8192
+    cost_per_1k_tokens: 0.0
+    mock_accuracy: 0.71
+
+  - name: "Qwen2.5-7B"
+    provider: ollama            # ONERILEN: ollama pull qwen2.5:7b
+    model: "qwen2.5:7b"
+    # Indirme istemiyorsan, sendeki modeli kullan:
+    #   model: "qwen3.5:4b"   ve  name: "Qwen3.5-4B"
+    kind: open
+    num_ctx: 8192
+    cost_per_1k_tokens: 0.0
+    mock_accuracy: 0.76
+
+evaluation:
+  n_runs: 3                     # protokol: ornek basina >=3 bagimsiz calistirma
+  temperature: 0.0
+  majority_vote: true
+
+rag:
+  embedding_model: "sentence-transformers/all-MiniLM-L6-v2"
+  chroma_dir: "data/chroma"
+  top_k: 4
+  apply_to_kinds: ["open"]     # RAG ablasyonu acik kaynak modellere uygulanir
+
+paths:
+  benchmark: "data/benchmark/benchmark.json"
+  sample_benchmark: "data/benchmark/sample_benchmark.json"
+  results_dir: "results"

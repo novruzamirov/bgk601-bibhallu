@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.env
+.venv/
+venv/
+data/chroma/
+data/raw/*.json
+results/*.json
+results/figures/
+*.gguf
+.DS_Store
+.ipynb_checkpoints/
